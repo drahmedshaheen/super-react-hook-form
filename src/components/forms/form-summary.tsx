@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form'
-import type { UserFormValues } from '@/components/user-form'
+import type { UserFormValues } from '@/features/forms/user/schema'
 import { format } from 'date-fns'
 import {
   Card,
@@ -227,9 +227,12 @@ export default function FormSummary() {
               <div className="flex flex-wrap gap-2">
                 {values.skills.map(
                   (skill, index) =>
-                    skill && (
-                      <Badge key={index} variant="secondary">
-                        {skill}
+                    skill.value && (
+                      <Badge
+                        key={`skills-${index}-${skill.value}`}
+                        variant="secondary"
+                      >
+                        {skill.value}
                       </Badge>
                     ),
                 )}
@@ -244,7 +247,10 @@ export default function FormSummary() {
                 {values.languages.map(
                   (lang, index) =>
                     lang.language && (
-                      <div key={index} className="flex items-center gap-2">
+                      <div
+                        key={`languages-${index}-${lang.language}`}
+                        className="flex items-center gap-2"
+                      >
                         <span>{lang.language}</span>
                         <Badge variant="outline" className="ml-auto text-xs">
                           {lang.proficiency === 'beginner' && 'Beginner'}

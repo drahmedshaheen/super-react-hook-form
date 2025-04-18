@@ -1,5 +1,5 @@
 import { useFormContext, useWatch, useFieldArray } from 'react-hook-form'
-import type { UserFormValues } from '@/components/user-form'
+import type { UserFormValues } from '@/features/forms/user/schema'
 import {
   FormField,
   FormItem,
@@ -18,7 +18,6 @@ import {
 } from '@/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -28,30 +27,23 @@ import { Plus, Trash, AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 export default function ProfessionalInfoForm() {
-  const {
-    control,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useFormContext<UserFormValues>()
+  const { control } = useFormContext<UserFormValues>()
 
-  // Field arrays for skills and languages
   const {
     fields: skillFields,
     append: appendSkill,
     remove: removeSkill,
-  } = useFieldArray({
-    control,
-    name: 'skills',
-  })
+  } = useFieldArray({ control, name: 'skills' })
 
   const {
     fields: languageFields,
     append: appendLanguage,
     remove: removeLanguage,
-  } = useFieldArray({
+  } = useFieldArray({ control, name: 'languages' })
+
+  const profession = useWatch({
     control,
-    name: 'languages',
+    name: 'profession',
   })
 
   // Watch values for computed fields
@@ -410,7 +402,7 @@ export default function ProfessionalInfoForm() {
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => appendSkill('')}
+                onClick={() => appendSkill({ value: '' })}
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Skill
@@ -421,7 +413,7 @@ export default function ProfessionalInfoForm() {
               <div key={field.id} className="flex items-center gap-2">
                 <FormField
                   control={control}
-                  name={`skills.${index}`}
+                  name={`skills.${index}.value`}
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormControl>
@@ -562,12 +554,12 @@ export default function ProfessionalInfoForm() {
           <div
             className="bg-primary h-full transition-all duration-500 ease-in-out"
             style={{
-              width: `${employmentStatus && skillFields[0].value ? '100%' : '50%'}`,
+              width: `${employmentStatus && skillFields[0] ? '100%' : '50%'}`,
             }}
           />
         </div>
         <p className="text-xs text-muted-foreground mt-2">
-          {employmentStatus && skillFields[0].value
+          {employmentStatus && skillFields[0]
             ? 'Professional information complete! Review your information in the summary.'
             : 'Complete all required fields to build a comprehensive professional profile.'}
         </p>

@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from 'react-hook-form'
-import type { UserFormValues } from '@/components/user-form'
+import type { UserFormValues } from '@/features/forms/user/schema'
 import {
   FormField,
   FormItem,
@@ -33,11 +33,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 
 export default function PersonalInfoForm() {
-  const {
-    control,
-    setValue,
-    formState: { errors },
-  } = useFormContext<UserFormValues>()
+  const { control } = useFormContext<UserFormValues>()
   const [age, setAge] = useState<number | null>(null)
 
   // Watch values for computed fields
