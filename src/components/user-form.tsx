@@ -85,7 +85,7 @@ export default function UserForm() {
               <TabsContent value="personal" className="space-y-4 mt-4">
                 <PersonalInfoForm />
                 <div className="flex justify-end mt-6">
-                  <Button type="button" onClick={nextTab}>
+                  <Button type="button" variant="outline" onClick={nextTab}>
                     Next <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
@@ -97,7 +97,7 @@ export default function UserForm() {
                   <Button type="button" variant="outline" onClick={prevTab}>
                     <ChevronLeft className="mr-2 h-4 w-4" /> Previous
                   </Button>
-                  <Button type="button" onClick={nextTab}>
+                  <Button type="button" variant="outline" onClick={nextTab}>
                     Next <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
@@ -109,7 +109,7 @@ export default function UserForm() {
                   <Button type="button" variant="outline" onClick={prevTab}>
                     <ChevronLeft className="mr-2 h-4 w-4" /> Previous
                   </Button>
-                  <Button type="submit">
+                  <Button type="submit" variant="outline">
                     <Save className="mr-2 h-4 w-4" /> Submit Form
                   </Button>
                 </div>

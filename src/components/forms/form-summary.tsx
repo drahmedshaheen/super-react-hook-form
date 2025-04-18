@@ -13,10 +13,7 @@ import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
 export default function FormSummary() {
-  const {
-    getValues,
-    formState: { errors },
-  } = useFormContext<UserFormValues>()
+  const { getValues } = useFormContext<UserFormValues>()
   const values = getValues()
 
   // Calculate age
