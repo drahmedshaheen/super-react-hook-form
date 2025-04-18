@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import type { UserFormValues } from '@/features/forms/user/schema'
 import {
@@ -8,29 +9,20 @@ import {
   FormDescription,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
+import {
+  Card,
+  Select,
+  Badge,
+  Input,
+  Popover,
+  Button,
+  Calendar,
+  RadioGroup,
+  Separator,
+} from '@/components/ui'
 
 export default function PersonalInfoForm() {
   const { control } = useFormContext<UserFormValues>()
@@ -76,10 +68,10 @@ export default function PersonalInfoForm() {
   return (
     <div className="space-y-8">
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Basic Information</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card.Header>
+          <Card.Title className="text-xl">Basic Information</Card.Title>
+        </Card.Header>
+        <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={control}
             name="firstName"
@@ -146,7 +138,7 @@ export default function PersonalInfoForm() {
               <FormItem className="flex flex-col">
                 <FormLabel>Date of Birth</FormLabel>
                 <Popover>
-                  <PopoverTrigger asChild>
+                  <Popover.Trigger asChild>
                     <FormControl>
                       <Button
                         variant="outline"
@@ -163,8 +155,8 @@ export default function PersonalInfoForm() {
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  </Popover.Trigger>
+                  <Popover.Content className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
                       selected={field.value}
@@ -174,7 +166,7 @@ export default function PersonalInfoForm() {
                       }
                       initialFocus
                     />
-                  </PopoverContent>
+                  </Popover.Content>
                 </Popover>
                 <FormMessage />
               </FormItem>
@@ -214,25 +206,25 @@ export default function PersonalInfoForm() {
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="male" />
+                        <RadioGroup.Item value="male" />
                       </FormControl>
                       <FormLabel className="font-normal">Male</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="female" />
+                        <RadioGroup.Item value="female" />
                       </FormControl>
                       <FormLabel className="font-normal">Female</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="nonBinary" />
+                        <RadioGroup.Item value="nonBinary" />
                       </FormControl>
                       <FormLabel className="font-normal">Non-binary</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="preferNotToSay" />
+                        <RadioGroup.Item value="preferNotToSay" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Prefer not to say
@@ -263,14 +255,14 @@ export default function PersonalInfoForm() {
               Automatically created from first and last name
             </FormDescription>
           </FormItem>
-        </CardContent>
+        </Card.Content>
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Address & Identification</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card.Header>
+          <Card.Title className="text-xl">Address & Identification</Card.Title>
+        </Card.Header>
+        <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={control}
             name="address.street"
@@ -338,23 +330,23 @@ export default function PersonalInfoForm() {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your country" />
-                    </SelectTrigger>
+                    <Select.Trigger>
+                      <Select.Value placeholder="Select your country" />
+                    </Select.Trigger>
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                    <SelectItem value="germany">Germany</SelectItem>
-                    <SelectItem value="france">France</SelectItem>
-                    <SelectItem value="japan">Japan</SelectItem>
-                    <SelectItem value="china">China</SelectItem>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="brazil">Brazil</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
+                  <Select.Content>
+                    <Select.Item value="usa">United States</Select.Item>
+                    <Select.Item value="canada">Canada</Select.Item>
+                    <Select.Item value="uk">United Kingdom</Select.Item>
+                    <Select.Item value="australia">Australia</Select.Item>
+                    <Select.Item value="germany">Germany</Select.Item>
+                    <Select.Item value="france">France</Select.Item>
+                    <Select.Item value="japan">Japan</Select.Item>
+                    <Select.Item value="china">China</Select.Item>
+                    <Select.Item value="india">India</Select.Item>
+                    <Select.Item value="brazil">Brazil</Select.Item>
+                    <Select.Item value="other">Other</Select.Item>
+                  </Select.Content>
                 </Select>
                 <FormMessage />
               </FormItem>
@@ -372,24 +364,24 @@ export default function PersonalInfoForm() {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your citizenship" />
-                    </SelectTrigger>
+                    <Select.Trigger>
+                      <Select.Value placeholder="Select your citizenship" />
+                    </Select.Trigger>
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                    <SelectItem value="germany">Germany</SelectItem>
-                    <SelectItem value="france">France</SelectItem>
-                    <SelectItem value="japan">Japan</SelectItem>
-                    <SelectItem value="china">China</SelectItem>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="brazil">Brazil</SelectItem>
-                    <SelectItem value="dual">Dual Citizenship</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
+                  <Select.Content>
+                    <Select.Item value="usa">United States</Select.Item>
+                    <Select.Item value="canada">Canada</Select.Item>
+                    <Select.Item value="uk">United Kingdom</Select.Item>
+                    <Select.Item value="australia">Australia</Select.Item>
+                    <Select.Item value="germany">Germany</Select.Item>
+                    <Select.Item value="france">France</Select.Item>
+                    <Select.Item value="japan">Japan</Select.Item>
+                    <Select.Item value="china">China</Select.Item>
+                    <Select.Item value="india">India</Select.Item>
+                    <Select.Item value="brazil">Brazil</Select.Item>
+                    <Select.Item value="dual">Dual Citizenship</Select.Item>
+                    <Select.Item value="other">Other</Select.Item>
+                  </Select.Content>
                 </Select>
                 <FormMessage />
               </FormItem>
@@ -412,7 +404,7 @@ export default function PersonalInfoForm() {
               </FormItem>
             )}
           />
-        </CardContent>
+        </Card.Content>
       </Card>
 
       {/* Profile completion indicator - computed field */}

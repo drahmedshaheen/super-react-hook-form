@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useFormContext, useWatch, useFieldArray } from 'react-hook-form'
 import type { UserFormValues } from '@/features/forms/user/schema'
 import {
@@ -8,23 +9,18 @@ import {
   FormDescription,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import {
+  Card,
+  Alert,
+  Button,
+  RadioGroup,
+  Input,
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Button } from '@/components/ui/button'
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Slider } from '@/components/ui/slider'
+  Badge,
+  Slider,
+  Separator,
+} from '@/components/ui'
 import { Plus, Trash, AlertCircle } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 export default function ProfessionalInfoForm() {
   const { control } = useFormContext<UserFormValues>()
@@ -126,10 +122,10 @@ export default function ProfessionalInfoForm() {
   return (
     <div className="space-y-8">
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Education & Experience</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card.Header>
+          <Card.Title className="text-xl">Education & Experience</Card.Title>
+        </Card.Header>
+        <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={control}
             name="education.highestDegree"
@@ -141,22 +137,24 @@ export default function ProfessionalInfoForm() {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your highest degree" />
-                    </SelectTrigger>
+                    <Select.Trigger>
+                      <Select.Value placeholder="Select your highest degree" />
+                    </Select.Trigger>
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="highSchool">
+                  <Select.Content>
+                    <Select.Item value="highSchool">
                       High School Diploma
-                    </SelectItem>
-                    <SelectItem value="associate">
+                    </Select.Item>
+                    <Select.Item value="associate">
                       Associate's Degree
-                    </SelectItem>
-                    <SelectItem value="bachelor">Bachelor's Degree</SelectItem>
-                    <SelectItem value="master">Master's Degree</SelectItem>
-                    <SelectItem value="doctorate">Doctorate/PhD</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
+                    </Select.Item>
+                    <Select.Item value="bachelor">
+                      Bachelor's Degree
+                    </Select.Item>
+                    <Select.Item value="master">Master's Degree</Select.Item>
+                    <Select.Item value="doctorate">Doctorate/PhD</Select.Item>
+                    <Select.Item value="other">Other</Select.Item>
+                  </Select.Content>
                 </Select>
                 <FormMessage />
               </FormItem>
@@ -219,13 +217,13 @@ export default function ProfessionalInfoForm() {
                   >
                     <FormItem className="flex items-center space-x-2 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="employed" />
+                        <RadioGroup.Item value="employed" />
                       </FormControl>
                       <FormLabel className="font-normal">Employed</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-2 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="selfEmployed" />
+                        <RadioGroup.Item value="selfEmployed" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Self-Employed
@@ -233,19 +231,19 @@ export default function ProfessionalInfoForm() {
                     </FormItem>
                     <FormItem className="flex items-center space-x-2 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="unemployed" />
+                        <RadioGroup.Item value="unemployed" />
                       </FormControl>
                       <FormLabel className="font-normal">Unemployed</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-2 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="student" />
+                        <RadioGroup.Item value="student" />
                       </FormControl>
                       <FormLabel className="font-normal">Student</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-2 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="retired" />
+                        <RadioGroup.Item value="retired" />
                       </FormControl>
                       <FormLabel className="font-normal">Retired</FormLabel>
                     </FormItem>
@@ -255,17 +253,17 @@ export default function ProfessionalInfoForm() {
               </FormItem>
             )}
           />
-        </CardContent>
+        </Card.Content>
       </Card>
 
-      {/* Conditional card based on employment status */}
+      {/* Conditional card. based on employment status */}
       {(employmentStatus === 'employed' ||
         employmentStatus === 'selfEmployed') && (
         <Card>
-          <CardHeader>
-            <CardTitle className="text-xl">Employment Details</CardTitle>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card.Header>
+            <Card.Title className="text-xl">Employment Details</Card.Title>
+          </Card.Header>
+          <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={control}
               name="profession"
@@ -386,15 +384,15 @@ export default function ProfessionalInfoForm() {
                 </FormDescription>
               </FormItem>
             )}
-          </CardContent>
+          </Card.Content>
         </Card>
       )}
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Skills & Languages</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
+        <Card.Header>
+          <Card.Title className="text-xl">Skills & Languages</Card.Title>
+        </Card.Header>
+        <Card.Content className="space-y-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <FormLabel>Skills</FormLabel>
@@ -490,18 +488,18 @@ export default function ProfessionalInfoForm() {
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Proficiency" />
-                            </SelectTrigger>
+                            <Select.Trigger>
+                              <Select.Value placeholder="Proficiency" />
+                            </Select.Trigger>
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="beginner">Beginner</SelectItem>
-                            <SelectItem value="intermediate">
+                          <Select.Content>
+                            <Select.Item value="beginner">Beginner</Select.Item>
+                            <Select.Item value="intermediate">
                               Intermediate
-                            </SelectItem>
-                            <SelectItem value="advanced">Advanced</SelectItem>
-                            <SelectItem value="native">Native</SelectItem>
-                          </SelectContent>
+                            </Select.Item>
+                            <Select.Item value="advanced">Advanced</Select.Item>
+                            <Select.Item value="native">Native</Select.Item>
+                          </Select.Content>
                         </Select>
                         <FormMessage />
                       </FormItem>
@@ -521,15 +519,15 @@ export default function ProfessionalInfoForm() {
               </div>
             ))}
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
 
       {/* Career advice based on inputs - computed content */}
       {employmentStatus && profession && yearsOfExperience && (
         <Alert>
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Career Insights</AlertTitle>
-          <AlertDescription>
+          <Alert.Title>Career Insights</Alert.Title>
+          <Alert.Description>
             {experienceLevel === 'Entry Level' &&
               'Consider focusing on building fundamental skills and seeking mentorship opportunities.'}
             {experienceLevel === 'Junior' &&
@@ -538,7 +536,7 @@ export default function ProfessionalInfoForm() {
               'Your experience is valuable. Consider mentoring juniors and taking on leadership responsibilities.'}
             {experienceLevel === 'Senior' &&
               'Your expertise is significant. Consider consulting, teaching, or pursuing leadership positions.'}
-          </AlertDescription>
+          </Alert.Description>
         </Alert>
       )}
 

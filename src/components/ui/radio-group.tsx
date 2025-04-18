@@ -40,4 +40,6 @@ function RadioGroupItem({
   )
 }
 
-export { RadioGroup, RadioGroupItem }
+RadioGroup.Item = RadioGroupItem
+
+export { RadioGroup }

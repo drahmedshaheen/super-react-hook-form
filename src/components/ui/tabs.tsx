@@ -61,4 +61,8 @@ function TabsContent({
   )
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+Tabs.List = TabsList
+Tabs.Trigger = TabsTrigger
+Tabs.Content = TabsContent
+
+export { Tabs }

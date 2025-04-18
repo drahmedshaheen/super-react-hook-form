@@ -1,5 +1,3 @@
-import type * as React from 'react'
-
 import { cn } from '@/lib/utils'
 
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
@@ -81,12 +79,11 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-export {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardAction,
-  CardDescription,
-  CardContent,
-}
+Card.Header = CardHeader
+Card.Footer = CardFooter
+Card.Title = CardTitle
+Card.Action = CardAction
+Card.Description = CardDescription
+Card.Content = CardContent
+
+export { Card }

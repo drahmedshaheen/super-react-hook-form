@@ -63,4 +63,7 @@ function AlertDescription({
   )
 }
 
-export { Alert, AlertTitle, AlertDescription }
+Alert.Title = AlertTitle
+Alert.Description = AlertDescription
+
+export { Alert }

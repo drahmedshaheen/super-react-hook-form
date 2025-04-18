@@ -1,15 +1,7 @@
 import { useFormContext } from 'react-hook-form'
 import type { UserFormValues } from '@/features/forms/user/schema'
 import { format } from 'date-fns'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
+import { Card, Badge, Separator } from '@/components/ui'
 import { cn } from '@/lib/utils'
 
 export default function FormSummary() {
@@ -51,11 +43,11 @@ export default function FormSummary() {
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle>Personal Information</CardTitle>
-            <CardDescription>Basic personal details</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          <Card.Header className="pb-2">
+            <Card.Title>Personal Information</Card.Title>
+            <Card.Description>Basic personal details</Card.Description>
+          </Card.Header>
+          <Card.Content className="space-y-4">
             <div className="space-y-1">
               <h4 className="text-sm font-medium text-muted-foreground">
                 Full Name
@@ -121,15 +113,15 @@ export default function FormSummary() {
                 ID: {values.identificationNumber}
               </p>
             </div>
-          </CardContent>
+          </Card.Content>
         </Card>
 
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle>Professional Information</CardTitle>
-            <CardDescription>Work and education details</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          <Card.Header className="pb-2">
+            <Card.Title>Professional Information</Card.Title>
+            <Card.Description>Work and education details</Card.Description>
+          </Card.Header>
+          <Card.Content className="space-y-4">
             <div className="space-y-1">
               <h4 className="text-sm font-medium text-muted-foreground">
                 Education
@@ -261,15 +253,15 @@ export default function FormSummary() {
                 )}
               </div>
             </div>
-          </CardContent>
+          </Card.Content>
         </Card>
       </div>
 
       <Card className="bg-muted/40">
-        <CardHeader className="pb-2">
-          <CardTitle>Form Completion</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <Card.Header className="pb-2">
+          <Card.Title>Form Completion</Card.Title>
+        </Card.Header>
+        <Card.Content>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span>Personal Information</span>
@@ -300,7 +292,7 @@ export default function FormSummary() {
               form.
             </p>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
     </div>
   )

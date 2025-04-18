@@ -1,19 +1,18 @@
 import { useState } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, Button, Tabs } from '@/components/ui'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import PersonalInfoForm from '@/components/forms/personal-info-form'
-import ProfessionalInfoForm from '@/components/forms/professional-info-form'
-import FormSummary from '@/components/forms/form-summary'
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react'
 import {
   userFormSchema,
   type UserFormValues,
 } from '@/features/forms/user/schema'
 import { defaultValues } from '@/features/forms/user/control'
+
+import PersonalInfoForm from '@/components/forms/personal-info-form'
+import ProfessionalInfoForm from '@/components/forms/professional-info-form'
+import FormSummary from '@/components/forms/form-summary'
 
 export default function UserForm() {
   const [activeTab, setActiveTab] = useState('personal')
@@ -73,25 +72,25 @@ export default function UserForm() {
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="personal">Personal Information</TabsTrigger>
-              <TabsTrigger value="professional">
+            <Tabs.List className="grid w-full grid-cols-3">
+              <Tabs.Trigger value="personal">Personal Information</Tabs.Trigger>
+              <Tabs.Trigger value="professional">
                 Professional Details
-              </TabsTrigger>
-              <TabsTrigger value="summary">Summary</TabsTrigger>
-            </TabsList>
+              </Tabs.Trigger>
+              <Tabs.Trigger value="summary">Summary</Tabs.Trigger>
+            </Tabs.List>
 
-            <CardContent className="p-6">
-              <TabsContent value="personal" className="space-y-4 mt-4">
+            <Card.Content className="p-6">
+              <Tabs.Content value="personal" className="space-y-4 mt-4">
                 <PersonalInfoForm />
                 <div className="flex justify-end mt-6">
                   <Button type="button" variant="outline" onClick={nextTab}>
                     Next <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
-              </TabsContent>
+              </Tabs.Content>
 
-              <TabsContent value="professional" className="space-y-4 mt-4">
+              <Tabs.Content value="professional" className="space-y-4 mt-4">
                 <ProfessionalInfoForm />
                 <div className="flex justify-between mt-6">
                   <Button type="button" variant="outline" onClick={prevTab}>
@@ -101,9 +100,9 @@ export default function UserForm() {
                     Next <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
-              </TabsContent>
+              </Tabs.Content>
 
-              <TabsContent value="summary" className="mt-4">
+              <Tabs.Content value="summary" className="mt-4">
                 <FormSummary />
                 <div className="flex justify-between mt-6">
                   <Button type="button" variant="outline" onClick={prevTab}>
@@ -113,8 +112,8 @@ export default function UserForm() {
                     <Save className="mr-2 h-4 w-4" /> Submit Form
                   </Button>
                 </div>
-              </TabsContent>
-            </CardContent>
+              </Tabs.Content>
+            </Card.Content>
           </Tabs>
         </Card>
       </form>
