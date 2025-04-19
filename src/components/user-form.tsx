@@ -1,14 +1,10 @@
 import { useState } from 'react'
-import { Card, Button, Tabs } from '@/components/ui'
-import { FormProvider, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Card, Button, Tabs, Form } from '@/components/ui'
 import { toast } from 'sonner'
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react'
-import {
-  userFormSchema,
-  type UserFormValues,
-} from '@/features/forms/user/schema'
-import { defaultValues } from '@/features/forms/user/control'
+import type { UserFormValues } from '@/features/forms/user/schema'
+import { formControl } from '@/features/forms/user'
 
 import PersonalInfoForm from '@/components/forms/personal-info-form'
 import ProfessionalInfoForm from '@/components/forms/professional-info-form'
@@ -17,11 +13,7 @@ import FormSummary from '@/components/forms/form-summary'
 export default function UserForm() {
   const [activeTab, setActiveTab] = useState('personal')
 
-  const form = useForm<UserFormValues>({
-    resolver: zodResolver(userFormSchema),
-    defaultValues,
-    mode: 'onChange',
-  })
+  const form = useForm({ formControl })
 
   const onSubmit = (data: UserFormValues) => {
     console.log('Form submitted:', data)
@@ -64,7 +56,7 @@ export default function UserForm() {
   }
 
   return (
-    <FormProvider {...form}>
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="mb-8">
           <Tabs
@@ -117,6 +109,6 @@ export default function UserForm() {
           </Tabs>
         </Card>
       </form>
-    </FormProvider>
+    </Form>
   )
 }

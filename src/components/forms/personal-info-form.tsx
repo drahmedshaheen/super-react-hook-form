@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
-import type { UserFormValues } from '@/features/forms/user/schema'
+import { useWatch } from 'react-hook-form'
+import { control } from '@/features/forms/user'
 import {
   FormField,
   FormItem,
@@ -12,20 +12,10 @@ import {
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
-import {
-  Card,
-  Select,
-  Badge,
-  Input,
-  Popover,
-  Button,
-  Calendar,
-  RadioGroup,
-  Separator,
-} from '@/components/ui'
+import { Card, Select, Badge, Input, Popover } from '@/components/ui'
+import { Button, Calendar, RadioGroup, Separator } from '@/components/ui'
 
 export default function PersonalInfoForm() {
-  const { control } = useFormContext<UserFormValues>()
   const [age, setAge] = useState<number | null>(null)
 
   // Watch values for computed fields

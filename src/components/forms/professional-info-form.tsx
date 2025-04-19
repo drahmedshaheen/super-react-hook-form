@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useFormContext, useWatch, useFieldArray } from 'react-hook-form'
-import type { UserFormValues } from '@/features/forms/user/schema'
+import { useWatch, useFieldArray } from 'react-hook-form'
+import { control } from '@/features/forms/user'
 import {
   FormField,
   FormItem,
@@ -23,8 +23,6 @@ import {
 import { Plus, Trash, AlertCircle } from 'lucide-react'
 
 export default function ProfessionalInfoForm() {
-  const { control } = useFormContext<UserFormValues>()
-
   const {
     fields: skillFields,
     append: appendSkill,

@@ -66,3 +66,4 @@ export const userFormSchema = z.object({
 })
 
 export type UserFormValues = z.input<typeof userFormSchema>
+export type UserFormInput = z.input<typeof userFormSchema>

@@ -1,11 +1,10 @@
-import { useFormContext } from 'react-hook-form'
 import type { UserFormValues } from '@/features/forms/user/schema'
+import { getValues } from '@/features/forms/user'
 import { format } from 'date-fns'
 import { Card, Badge, Separator } from '@/components/ui'
 import { cn } from '@/lib/utils'
 
 export default function FormSummary() {
-  const { getValues } = useFormContext<UserFormValues>()
   const values = getValues()
 
   // Calculate age

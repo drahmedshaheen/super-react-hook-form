@@ -1,6 +1,9 @@
-import type { UserFormValues } from './schema'
+import { createFormControl } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-export const defaultValues = {
+import { userFormSchema, type UserFormInput } from './schema'
+
+const defaultValues: UserFormInput = {
   firstName: '',
   lastName: '',
   email: '',
@@ -27,4 +30,10 @@ export const defaultValues = {
   yearsOfExperience: '',
   skills: [{ value: '' }],
   languages: [{ language: '', proficiency: 'beginner' }],
-} satisfies UserFormValues
+}
+
+export const { formControl, control, getValues } = createFormControl({
+  resolver: zodResolver(userFormSchema),
+  defaultValues,
+  mode: 'onChange',
+})
