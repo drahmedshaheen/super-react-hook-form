@@ -16,45 +16,6 @@ import { Card, Select, Badge, Input, Popover } from '@/components/ui'
 import { Button, Calendar, RadioGroup, Separator } from '@/components/ui'
 
 export default function PersonalInfoForm() {
-  const [age, setAge] = useState<number | null>(null)
-
-  // Watch values for computed fields
-  const dateOfBirth = useWatch({
-    control,
-    name: 'dateOfBirth',
-  })
-
-  const firstName = useWatch({
-    control,
-    name: 'firstName',
-  })
-
-  const lastName = useWatch({
-    control,
-    name: 'lastName',
-  })
-
-  // Computed field: Age calculation
-  useEffect(() => {
-    if (dateOfBirth) {
-      const today = new Date()
-      const birthDate = new Date(dateOfBirth)
-      let calculatedAge = today.getFullYear() - birthDate.getFullYear()
-      const monthDiff = today.getMonth() - birthDate.getMonth()
-
-      if (
-        monthDiff < 0 ||
-        (monthDiff === 0 && today.getDate() < birthDate.getDate())
-      ) {
-        calculatedAge--
-      }
-
-      setAge(calculatedAge)
-    } else {
-      setAge(null)
-    }
-  }, [dateOfBirth])
-
   return (
     <div className="space-y-8">
       <Card>
@@ -149,7 +110,7 @@ export default function PersonalInfoForm() {
                   <Popover.Content className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      selected={field.value}
+                      selected={field.value ?? undefined}
                       onSelect={field.onChange}
                       disabled={(date) =>
                         date > new Date() || date < new Date('1900-01-01')
@@ -164,23 +125,7 @@ export default function PersonalInfoForm() {
           />
 
           {/* Computed field: Age */}
-          <FormItem>
-            <FormLabel>Age</FormLabel>
-            <FormControl>
-              <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-                {age !== null ? (
-                  <span>{age} years old</span>
-                ) : (
-                  <span className="text-muted-foreground">
-                    Enter date of birth
-                  </span>
-                )}
-              </div>
-            </FormControl>
-            <FormDescription>
-              Automatically calculated from your date of birth
-            </FormDescription>
-          </FormItem>
+          <AgeField />
 
           <FormField
             control={control}
@@ -191,7 +136,7 @@ export default function PersonalInfoForm() {
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={field.value ?? undefined}
                     className="flex flex-col space-y-1"
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
@@ -228,23 +173,7 @@ export default function PersonalInfoForm() {
           />
 
           {/* Computed field: Full Name */}
-          <FormItem>
-            <FormLabel>Full Name</FormLabel>
-            <FormControl>
-              <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-                {firstName && lastName ? (
-                  <span>{`${firstName} ${lastName}`}</span>
-                ) : (
-                  <span className="text-muted-foreground">
-                    Enter first and last name
-                  </span>
-                )}
-              </div>
-            </FormControl>
-            <FormDescription>
-              Automatically created from first and last name
-            </FormDescription>
-          </FormItem>
+          <FullNameField />
         </Card.Content>
       </Card>
 
@@ -398,27 +327,131 @@ export default function PersonalInfoForm() {
       </Card>
 
       {/* Profile completion indicator - computed field */}
-      <div className="bg-muted rounded-lg p-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-medium">Profile Completion</h3>
-          <Badge variant="outline" className="bg-primary/10">
-            Personal Info
-          </Badge>
+      <Indicator />
+    </div>
+  )
+}
+
+function AgeField() {
+  const [age, setAge] = useState<number | null>(null)
+
+  // Watch values for computed fields
+  const dateOfBirth = useWatch({
+    control,
+    name: 'dateOfBirth',
+  })
+
+  // Computed field: Age calculation
+  useEffect(() => {
+    if (dateOfBirth) {
+      const today = new Date()
+      const birthDate = new Date(dateOfBirth)
+      let calculatedAge = today.getFullYear() - birthDate.getFullYear()
+      const monthDiff = today.getMonth() - birthDate.getMonth()
+
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      ) {
+        calculatedAge--
+      }
+
+      setAge(calculatedAge)
+    } else {
+      setAge(null)
+    }
+  }, [dateOfBirth])
+
+  return (
+    <FormItem>
+      <FormLabel>Age</FormLabel>
+      <FormControl>
+        <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
+          {age !== null ? (
+            <span>{age} years old</span>
+          ) : (
+            <span className="text-muted-foreground">Enter date of birth</span>
+          )}
         </div>
-        <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
-          <div
-            className="bg-primary h-full transition-all duration-500 ease-in-out"
-            style={{
-              width: `${firstName && lastName && dateOfBirth ? '100%' : '50%'}`,
-            }}
-          />
+      </FormControl>
+      <FormDescription>
+        Automatically calculated from your date of birth
+      </FormDescription>
+    </FormItem>
+  )
+}
+
+function FullNameField() {
+  // Watch values for computed fields
+  const firstName = useWatch({
+    control,
+    name: 'firstName',
+  })
+
+  const lastName = useWatch({
+    control,
+    name: 'lastName',
+  })
+
+  return (
+    <FormItem>
+      <FormLabel>Full Name</FormLabel>
+      <FormControl>
+        <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
+          {firstName && lastName ? (
+            <span>{`${firstName} ${lastName}`}</span>
+          ) : (
+            <span className="text-muted-foreground">
+              Enter first and last name
+            </span>
+          )}
         </div>
-        <p className="text-xs text-muted-foreground mt-2">
-          {firstName && lastName && dateOfBirth
-            ? 'Basic information complete! Fill out additional details for a comprehensive profile.'
-            : 'Complete all required fields to proceed to the next section.'}
-        </p>
+      </FormControl>
+      <FormDescription>
+        Automatically created from first and last name
+      </FormDescription>
+    </FormItem>
+  )
+}
+
+function Indicator() {
+  // Watch values for computed fields
+  const dateOfBirth = useWatch({
+    control,
+    name: 'dateOfBirth',
+  })
+
+  const firstName = useWatch({
+    control,
+    name: 'firstName',
+  })
+
+  const lastName = useWatch({
+    control,
+    name: 'lastName',
+  })
+
+  return (
+    <div className="bg-muted rounded-lg p-4">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-medium">Profile Completion</h3>
+        <Badge variant="outline" className="bg-primary/10">
+          Personal Info
+        </Badge>
       </div>
+      <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
+        <div
+          className="bg-primary h-full transition-all duration-500 ease-in-out"
+          style={{
+            width: `${firstName && lastName && dateOfBirth ? '100%' : '50%'}`,
+          }}
+        />
+      </div>
+      <p className="text-xs text-muted-foreground mt-2">
+        {firstName && lastName && dateOfBirth
+          ? 'Basic information complete! Fill out additional details for a comprehensive profile.'
+          : 'Complete all required fields to proceed to the next section.'}
+      </p>
     </div>
   )
 }

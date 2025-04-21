@@ -4,7 +4,8 @@ import { Card, Button, Tabs, Form } from '@/components/ui'
 import { toast } from 'sonner'
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react'
 import type { UserFormValues } from '@/features/forms/user/schema'
-import { formControl } from '@/features/forms/user'
+import { formControl, control } from '@/features/forms/user'
+import { DevTool } from '@hookform/devtools'
 
 import PersonalInfoForm from '@/components/forms/personal-info-form'
 import ProfessionalInfoForm from '@/components/forms/professional-info-form'
@@ -109,6 +110,7 @@ export default function UserForm() {
           </Tabs>
         </Card>
       </form>
+      <DevTool control={control} />
     </Form>
   )
 }
