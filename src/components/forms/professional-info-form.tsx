@@ -1,15 +1,74 @@
-import { useState, useEffect } from 'react'
-import { useWatch, useFieldArray } from 'react-hook-form'
-import { control } from '@/features/forms/user'
-import { Card, Alert, Button, RadioGroup } from '@/components/ui'
+import { useFieldArray } from 'react-hook-form'
+import { formControl, control } from '@/features/forms/user'
+import { Card, Alert, Button, RadioGroup, Label } from '@/components/ui'
 import { Input, Select, Badge, Slider, Separator } from '@/components/ui'
 import { Plus, Trash, AlertCircle } from 'lucide-react'
-import { signal } from '@preact/signals-react'
+import { signal, computed } from '@preact/signals-react'
 import { useSignals } from '@preact/signals-react/runtime'
 import { Form } from '@/features/forms/ui/form'
 import { formState$ } from '@/features/forms/user/subscribe'
+import type { UserFormInput } from '@/features/forms/user/schema'
 
-const experienceLevel = signal('Junior')
+// Watch values for computed fields
+
+const profession = signal('Junior')
+const yearsOfExperience = signal('Junior')
+const experienceLevel = computed(() => {
+  if (!yearsOfExperience.value) return 'Not Specified'
+  const years = Number.parseInt(yearsOfExperience.value)
+  let level = 'Entry Level'
+
+  if (years >= 10) {
+    level = 'Senior'
+  } else if (years >= 5) {
+    level = 'Mid-Level'
+  } else if (years >= 2) {
+    level = 'Junior'
+  }
+
+  return level
+})
+const employmentStatus = signal<UserFormInput['employmentStatus']>(null)
+const isEmployed = computed(
+  () =>
+    employmentStatus.value === 'employed' ||
+    employmentStatus.value === 'selfEmployed',
+)
+const firstSkillField = signal('')
+const annualIncome = signal<string | null>(null)
+const taxEstimate = computed<string | null>(() => {
+  if (!annualIncome.value) return null
+  const income = Number.parseInt(annualIncome.value.replace(/[^0-9]/g, ''))
+
+  if (Number.isNaN(income)) return null
+
+  // Simple progressive tax calculation for demonstration
+  let taxAmount = 0
+
+  if (income <= 50000) {
+    taxAmount = income * 0.15
+  } else if (income <= 100000) {
+    taxAmount = 7500 + (income - 50000) * 0.25
+  } else {
+    taxAmount = 20000 + (income - 100000) * 0.35
+  }
+
+  return `$${taxAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+})
+
+formControl.subscribe({
+  formState: {
+    isDirty: true,
+    values: true,
+  },
+  callback: (formState) => {
+    profession.value = formState.values.profession
+    yearsOfExperience.value = formState.values.yearsOfExperience
+    firstSkillField.value = formState.values.skills.at(0)?.value ?? ''
+    employmentStatus.value = formState.values.employmentStatus
+    annualIncome.value = formState.values.annualIncome
+  },
+})
 
 // Function to format currency input
 const formatCurrency = (value: string) => {
@@ -110,7 +169,7 @@ export default function ProfessionalInfoForm() {
             )}
           />
 
-          {/* <Form.Field
+          <Form.Field
             control={control}
             formState$={formState$}
             name="employmentStatus"
@@ -162,12 +221,12 @@ export default function ProfessionalInfoForm() {
                 <Form.Message />
               </Form.Item>
             )}
-          /> */}
+          />
         </Card.Content>
       </Card>
 
       {/* Conditional card. based on employment status */}
-      {/* <EmployedOrSelfEmployed /> */}
+      <EmployedOrSelfEmployed />
 
       <Card>
         <Card.Header>
@@ -183,24 +242,19 @@ export default function ProfessionalInfoForm() {
       </Card>
 
       {/* Career advice based on inputs - computed content */}
-      {/* <CareerInsights /> */}
+      <CareerInsights />
 
       {/* Profile completion indicator - computed field */}
-      {/* <Indicator /> */}
+      <Indicator />
     </div>
   )
 }
 
 function EmployedOrSelfEmployed() {
-  // Watch values for computed fields
-  const employmentStatus = useWatch({
-    control,
-    name: 'employmentStatus',
-  })
+  useSignals()
 
   return (
-    (employmentStatus === 'employed' ||
-      employmentStatus === 'selfEmployed') && (
+    isEmployed.value && (
       <Card>
         <Card.Header>
           <Card.Title className="text-xl">Employment Details</Card.Title>
@@ -289,17 +343,7 @@ function EmployedOrSelfEmployed() {
           />
 
           {/* Computed field: Experience Level */}
-          {/* <Form.Item>
-            <Form.Label>Experience Level</Form.Label>
-            <Form.Control>
-              <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-                <span>{experienceLevel.value}</span>
-              </div>
-            </Form.Control>
-            <Form.Description>
-              Automatically determined based on years of experience
-            </Form.Description>
-          </Form.Item> */}
+          <ExperienceLevel />
 
           <Form.Field
             control={control}
@@ -325,56 +369,39 @@ function EmployedOrSelfEmployed() {
           />
 
           {/* Computed field: Estimated Tax */}
-          {/* <EstimatedTax /> */}
+          <EstimatedTax />
         </Card.Content>
       </Card>
     )
   )
 }
 
-function EstimatedTax() {
-  const annualIncome = useWatch({
-    control,
-    name: 'annualIncome',
-  })
-
-  const [taxEstimate, setTaxEstimate] = useState<string | null>(null)
-
-  // Computed field: Tax estimate based on income
-  useEffect(() => {
-    if (annualIncome) {
-      const income = Number.parseInt(annualIncome.replace(/[^0-9]/g, ''))
-
-      if (!Number.isNaN(income)) {
-        // Simple progressive tax calculation for demonstration
-        let taxAmount = 0
-
-        if (income <= 50000) {
-          taxAmount = income * 0.15
-        } else if (income <= 100000) {
-          taxAmount = 7500 + (income - 50000) * 0.25
-        } else {
-          taxAmount = 20000 + (income - 100000) * 0.35
-        }
-
-        setTaxEstimate(
-          `$${taxAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
-        )
-      } else {
-        setTaxEstimate(null)
-      }
-    } else {
-      setTaxEstimate(null)
-    }
-  }, [annualIncome])
+function ExperienceLevel() {
+  useSignals()
 
   return (
-    annualIncome && (
+    <div id="experience-level" className="grid gap-2">
+      <Label htmlFor="experience-level">Experience Level</Label>
+      <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
+        <span>{experienceLevel.value}</span>
+      </div>
+      <p className="text-muted-foreground text-sm">
+        Automatically determined based on years of experience
+      </p>
+    </div>
+  )
+}
+
+function EstimatedTax() {
+  useSignals()
+
+  return (
+    annualIncome.value && (
       <Form.Item>
         <Form.Label>Estimated Annual Tax</Form.Label>
         <Form.Control>
           <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-            {taxEstimate || 'Enter annual income'}
+            {taxEstimate.value || 'Enter annual income'}
           </div>
         </Form.Control>
         <Form.Description>
@@ -390,15 +417,12 @@ function SkillFields() {
     fields: skillFields,
     append: appendSkill,
     remove: removeSkill,
-  } = useFieldArray({
-    control,
-    name: 'skills',
-  })
+  } = useFieldArray({ control, name: 'skills' })
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Form.Label>Skills</Form.Label>
+        <Label>Skills</Label>
         <Button
           type="button"
           variant="outline"
@@ -449,15 +473,12 @@ function LanguageFields() {
     fields: languageFields,
     append: appendLanguage,
     remove: removeLanguage,
-  } = useFieldArray({
-    control,
-    name: 'languages',
-  })
+  } = useFieldArray({ control, name: 'languages' })
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Form.Label>Languages</Form.Label>
+        <Label>Languages</Label>
         <Button
           type="button"
           variant="outline"
@@ -537,48 +558,12 @@ function LanguageFields() {
 }
 
 function CareerInsights() {
-  // Watch values for computed fields
-  const profession = useWatch({
-    control,
-    name: 'profession',
-  })
-
-  const employmentStatus = useWatch({
-    control,
-    name: 'employmentStatus',
-  })
-
-  const yearsOfExperience = useWatch({
-    control,
-    name: 'yearsOfExperience',
-  })
-
   useSignals()
 
-  // Computed field: Experience level based on years
-  useEffect(() => {
-    if (yearsOfExperience) {
-      const years = Number.parseInt(yearsOfExperience)
-      let level = 'Entry Level'
-
-      if (years >= 10) {
-        level = 'Senior'
-      } else if (years >= 5) {
-        level = 'Mid-Level'
-      } else if (years >= 2) {
-        level = 'Junior'
-      }
-
-      experienceLevel.value = level
-    } else {
-      experienceLevel.value = 'Not Specified'
-    }
-  }, [yearsOfExperience])
-
   return (
-    employmentStatus &&
-    profession &&
-    yearsOfExperience && (
+    employmentStatus.value &&
+    profession.value &&
+    yearsOfExperience.value && (
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <Alert.Title>Career Insights</Alert.Title>
@@ -598,16 +583,7 @@ function CareerInsights() {
 }
 
 function Indicator() {
-  // Watch values for computed fields
-  const employmentStatus = useWatch({
-    control,
-    name: 'employmentStatus',
-  })
-
-  const skillFields = useWatch({
-    control,
-    name: 'skills',
-  })
+  useSignals()
 
   return (
     <div className="bg-muted rounded-lg p-4">
@@ -621,12 +597,12 @@ function Indicator() {
         <div
           className="bg-primary h-full transition-all duration-500 ease-in-out"
           style={{
-            width: `${employmentStatus && skillFields[0].value ? '100%' : '50%'}`,
+            width: `${employmentStatus.value && firstSkillField.value ? '100%' : '50%'}`,
           }}
         />
       </div>
       <p className="text-xs text-muted-foreground mt-2">
-        {employmentStatus && skillFields[0].value
+        {employmentStatus.value && firstSkillField.value
           ? 'Professional information complete! Review your information in the summary.'
           : 'Complete all required fields to build a comprehensive professional profile.'}
       </p>
