@@ -7,60 +7,72 @@ import type { UserFormValues } from '@/features/forms/user/schema'
 import { formControl, control } from '@/features/forms/user'
 import { DevTool } from '@hookform/devtools'
 import { Form } from '@/features/forms/ui/form'
+import { signal } from '@preact/signals-react'
+import { useSignals } from '@preact/signals-react/runtime'
 
 import PersonalInfoForm from '@/components/forms/personal-info-form'
 import ProfessionalInfoForm from '@/components/forms/professional-info-form'
 import FormSummary from '@/components/forms/form-summary'
 
+const activeTab = signal('personal')
+
+const nextTab = () => {
+  if (activeTab.value === 'personal') {
+    const isValid = (
+      [
+        'firstName',
+        'lastName',
+        'email',
+        'phone',
+        'dateOfBirth',
+        'gender',
+        'citizenship',
+      ] as const
+    ).every((field) => formControl.getFieldState(field).invalid === false)
+
+    if (isValid) {
+      activeTab.value = 'professional'
+    } else {
+      formControl.trigger()
+      toast.error(
+        'Please fill out all required fields correctly before proceeding',
+      )
+    }
+  } else if (activeTab.value === 'professional') {
+    activeTab.value = 'summary'
+  }
+}
+
+const prevTab = () => {
+  if (activeTab.value === 'professional') {
+    activeTab.value = 'personal'
+  } else if (activeTab.value === 'summary') {
+    activeTab.value = 'professional'
+  }
+}
+
+const setActiveTab = (value: string) => {
+  activeTab.value = value
+}
+
+const onSubmit = (data: UserFormValues) => {
+  console.log('Form submitted:', data)
+  toast.success('Form submitted successfully')
+}
+
 export default function UserForm() {
-  const [activeTab, setActiveTab] = useState('personal')
+  useForm({ formControl })
 
-  const form = useForm({ formControl })
-
-  const onSubmit = (data: UserFormValues) => {
-    console.log('Form submitted:', data)
-    toast.success('Form submitted successfully')
-  }
-
-  const nextTab = () => {
-    if (activeTab === 'personal') {
-      const isValid = (
-        [
-          'firstName',
-          'lastName',
-          'email',
-          'phone',
-          'dateOfBirth',
-          'gender',
-          'citizenship',
-        ] as const
-      ).every((field) => form.getFieldState(field).invalid === false)
-
-      if (isValid) {
-        setActiveTab('professional')
-      } else {
-        form.trigger()
-        toast.error(
-          'Please fill out all required fields correctly before proceeding',
-        )
-      }
-    } else if (activeTab === 'professional') {
-      setActiveTab('summary')
-    }
-  }
-
-  const prevTab = () => {
-    if (activeTab === 'professional') {
-      setActiveTab('personal')
-    } else if (activeTab === 'summary') {
-      setActiveTab('professional')
-    }
-  }
+  useSignals()
 
   return (
-    <Form onSubmit={form.handleSubmit(onSubmit)}>
+    <Form onSubmit={formControl.handleSubmit(onSubmit)}>
       <Card className="mb-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs
+          value={activeTab.value}
+          onValueChange={setActiveTab}
+          className="w-full"
+        >
           <Tabs.List className="grid w-full grid-cols-3">
             <Tabs.Trigger value="personal">Personal Information</Tabs.Trigger>
             <Tabs.Trigger value="professional">
