@@ -15,7 +15,7 @@ import { useFormState, type FormState } from './useFormState'
 export type UseControllerProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = Omit<_UseControllerProps<TFieldValues, TName>, 'control'> & {
+> = _UseControllerProps<TFieldValues, TName> & {
   formState$: BehaviorSubject<FormState<TFieldValues>>
 }
 

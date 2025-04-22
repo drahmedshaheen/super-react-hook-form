@@ -1,10 +1,10 @@
 import { BehaviorSubject } from 'rxjs'
 import { map, pairwise } from 'rxjs/operators'
 
-import type { UserFormValues } from './schema'
+import type { UserFormInput } from './schema'
 import type { FormState } from '../shared/useFormState'
 
-export const formState$ = new BehaviorSubject<FormState<UserFormValues>>({
+export const formState$ = new BehaviorSubject<FormState<UserFormInput>>({
   values: {} as any,
   submitCount: 0,
   isDirty: false,

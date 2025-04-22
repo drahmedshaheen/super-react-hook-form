@@ -1,19 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useWatch } from 'react-hook-form'
 import { control } from '@/features/forms/user'
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-} from '@/components/ui/form'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { Card, Select, Badge, Input, Popover } from '@/components/ui'
-import { Button, Calendar, RadioGroup, Separator } from '@/components/ui'
+import { Button, Calendar, RadioGroup } from '@/components/ui'
+import { Form } from '@/features/forms/ui/form'
+import { formState$ } from '@/features/forms/user/subscribe'
 
 export default function PersonalInfoForm() {
   return (
@@ -23,74 +17,79 @@ export default function PersonalInfoForm() {
           <Card.Title className="text-xl">Basic Information</Card.Title>
         </Card.Header>
         <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="firstName"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>First Name</Form.Label>
+                <Form.Control>
                   <Input placeholder="John" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="lastName"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control>
                   <Input placeholder="Doe" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="email"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email Address</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control>
                   <Input placeholder="john.doe@example.com" {...field} />
-                </FormControl>
-                <FormDescription>
+                </Form.Control>
+                <Form.Description>
                   We'll never share your email with anyone else.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
+                </Form.Description>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="phone"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone Number</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control>
                   <Input placeholder="+1 (555) 123-4567" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="dateOfBirth"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Date of Birth</FormLabel>
+              <Form.Item className="flex flex-col">
+                <Form.Label>Date of Birth</Form.Label>
                 <Popover>
                   <Popover.Trigger asChild>
-                    <FormControl>
+                    <Form.Control>
                       <Button
                         variant="outline"
                         className={cn(
@@ -105,7 +104,7 @@ export default function PersonalInfoForm() {
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
-                    </FormControl>
+                    </Form.Control>
                   </Popover.Trigger>
                   <Popover.Content className="w-auto p-0" align="start">
                     <Calendar
@@ -119,61 +118,64 @@ export default function PersonalInfoForm() {
                     />
                   </Popover.Content>
                 </Popover>
-                <FormMessage />
-              </FormItem>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
           {/* Computed field: Age */}
-          <AgeField />
+          {/* <AgeField /> */}
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="gender"
             render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel>Gender</FormLabel>
-                <FormControl>
+              <Form.Item className="space-y-3">
+                <Form.Label>Gender</Form.Label>
+                <Form.Control>
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value ?? undefined}
                     className="flex flex-col space-y-1"
                   >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
+                    <Form.Item className="flex items-center space-x-3 space-y-0">
+                      <Form.Control>
                         <RadioGroup.Item value="male" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Male</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
+                      </Form.Control>
+                      <Form.Label className="font-normal">Male</Form.Label>
+                    </Form.Item>
+                    <Form.Item className="flex items-center space-x-3 space-y-0">
+                      <Form.Control>
                         <RadioGroup.Item value="female" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Female</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
+                      </Form.Control>
+                      <Form.Label className="font-normal">Female</Form.Label>
+                    </Form.Item>
+                    <Form.Item className="flex items-center space-x-3 space-y-0">
+                      <Form.Control>
                         <RadioGroup.Item value="nonBinary" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Non-binary</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
+                      </Form.Control>
+                      <Form.Label className="font-normal">
+                        Non-binary
+                      </Form.Label>
+                    </Form.Item>
+                    <Form.Item className="flex items-center space-x-3 space-y-0">
+                      <Form.Control>
                         <RadioGroup.Item value="preferNotToSay" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
+                      </Form.Control>
+                      <Form.Label className="font-normal">
                         Prefer not to say
-                      </FormLabel>
-                    </FormItem>
+                      </Form.Label>
+                    </Form.Item>
                   </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
           {/* Computed field: Full Name */}
-          <FullNameField />
+          {/* <FullNameField /> */}
         </Card.Content>
       </Card>
 
@@ -182,77 +184,82 @@ export default function PersonalInfoForm() {
           <Card.Title className="text-xl">Address & Identification</Card.Title>
         </Card.Header>
         <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="address.street"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Street Address</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Street Address</Form.Label>
+                <Form.Control>
                   <Input placeholder="123 Main St" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="address.city"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>City</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>City</Form.Label>
+                <Form.Control>
                   <Input placeholder="Anytown" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="address.state"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>State/Province</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>State/Province</Form.Label>
+                <Form.Control>
                   <Input placeholder="CA" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="address.zipCode"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Zip/Postal Code</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Zip/Postal Code</Form.Label>
+                <Form.Control>
                   <Input placeholder="12345" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="address.country"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Country</FormLabel>
+              <Form.Item>
+                <Form.Label>Country</Form.Label>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <FormControl>
+                  <Form.Control>
                     <Select.Trigger>
                       <Select.Value placeholder="Select your country" />
                     </Select.Trigger>
-                  </FormControl>
+                  </Form.Control>
                   <Select.Content>
                     <Select.Item value="usa">United States</Select.Item>
                     <Select.Item value="canada">Canada</Select.Item>
@@ -267,26 +274,27 @@ export default function PersonalInfoForm() {
                     <Select.Item value="other">Other</Select.Item>
                   </Select.Content>
                 </Select>
-                <FormMessage />
-              </FormItem>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="citizenship"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Citizenship</FormLabel>
+              <Form.Item>
+                <Form.Label>Citizenship</Form.Label>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <FormControl>
+                  <Form.Control>
                     <Select.Trigger>
                       <Select.Value placeholder="Select your citizenship" />
                     </Select.Trigger>
-                  </FormControl>
+                  </Form.Control>
                   <Select.Content>
                     <Select.Item value="usa">United States</Select.Item>
                     <Select.Item value="canada">Canada</Select.Item>
@@ -302,25 +310,26 @@ export default function PersonalInfoForm() {
                     <Select.Item value="other">Other</Select.Item>
                   </Select.Content>
                 </Select>
-                <FormMessage />
-              </FormItem>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="identificationNumber"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>ID Number (Passport/National ID)</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>ID Number (Passport/National ID)</Form.Label>
+                <Form.Control>
                   <Input placeholder="AB123456" {...field} />
-                </FormControl>
-                <FormDescription>
+                </Form.Control>
+                <Form.Description>
                   Passport, driver's license, or other government-issued ID
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
+                </Form.Description>
+                <Form.Message />
+              </Form.Item>
             )}
           />
         </Card.Content>
@@ -363,9 +372,9 @@ function AgeField() {
   }, [dateOfBirth])
 
   return (
-    <FormItem>
-      <FormLabel>Age</FormLabel>
-      <FormControl>
+    <Form.Item>
+      <Form.Label>Age</Form.Label>
+      <Form.Control>
         <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
           {age !== null ? (
             <span>{age} years old</span>
@@ -373,11 +382,11 @@ function AgeField() {
             <span className="text-muted-foreground">Enter date of birth</span>
           )}
         </div>
-      </FormControl>
-      <FormDescription>
+      </Form.Control>
+      <Form.Description>
         Automatically calculated from your date of birth
-      </FormDescription>
-    </FormItem>
+      </Form.Description>
+    </Form.Item>
   )
 }
 
@@ -394,9 +403,9 @@ function FullNameField() {
   })
 
   return (
-    <FormItem>
-      <FormLabel>Full Name</FormLabel>
-      <FormControl>
+    <Form.Item>
+      <Form.Label>Full Name</Form.Label>
+      <Form.Control>
         <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
           {firstName && lastName ? (
             <span>{`${firstName} ${lastName}`}</span>
@@ -406,11 +415,11 @@ function FullNameField() {
             </span>
           )}
         </div>
-      </FormControl>
-      <FormDescription>
+      </Form.Control>
+      <Form.Description>
         Automatically created from first and last name
-      </FormDescription>
-    </FormItem>
+      </Form.Description>
+    </Form.Item>
   )
 }
 

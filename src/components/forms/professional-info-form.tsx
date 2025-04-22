@@ -1,19 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useWatch, useFieldArray } from 'react-hook-form'
 import { control } from '@/features/forms/user'
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-} from '@/components/ui/form'
 import { Card, Alert, Button, RadioGroup } from '@/components/ui'
 import { Input, Select, Badge, Slider, Separator } from '@/components/ui'
 import { Plus, Trash, AlertCircle } from 'lucide-react'
 import { signal } from '@preact/signals-react'
 import { useSignals } from '@preact/signals-react/runtime'
+import { Form } from '@/features/forms/ui/form'
+import { formState$ } from '@/features/forms/user/subscribe'
 
 const experienceLevel = signal('Junior')
 
@@ -35,21 +29,22 @@ export default function ProfessionalInfoForm() {
           <Card.Title className="text-xl">Education & Experience</Card.Title>
         </Card.Header>
         <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="education.highestDegree"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Highest Degree</FormLabel>
+              <Form.Item>
+                <Form.Label>Highest Degree</Form.Label>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value ?? undefined}
                 >
-                  <FormControl>
+                  <Form.Control>
                     <Select.Trigger>
                       <Select.Value placeholder="Select your highest degree" />
                     </Select.Trigger>
-                  </FormControl>
+                  </Form.Control>
                   <Select.Content>
                     <Select.Item value="highSchool">
                       High School Diploma
@@ -65,108 +60,114 @@ export default function ProfessionalInfoForm() {
                     <Select.Item value="other">Other</Select.Item>
                   </Select.Content>
                 </Select>
-                <FormMessage />
-              </FormItem>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="education.fieldOfStudy"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Field of Study</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Field of Study</Form.Label>
+                <Form.Control>
                   <Input placeholder="Computer Science" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="education.institution"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Institution</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Institution</Form.Label>
+                <Form.Control>
                   <Input placeholder="University of Example" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="education.graduationYear"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Graduation Year</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Graduation Year</Form.Label>
+                <Form.Control>
                   <Input placeholder="2020" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          {/* <Form.Field
             control={control}
+            formState$={formState$}
             name="employmentStatus"
             render={({ field }) => (
-              <FormItem className="col-span-full">
-                <FormLabel>Employment Status</FormLabel>
-                <FormControl>
+              <Form.Item className="col-span-full">
+                <Form.Label>Employment Status</Form.Label>
+                <Form.Control>
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value ?? undefined}
                     className="flex flex-wrap gap-4"
                   >
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
+                    <Form.Item className="flex items-center space-x-2 space-y-0">
+                      <Form.Control>
                         <RadioGroup.Item value="employed" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Employed</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
+                      </Form.Control>
+                      <Form.Label className="font-normal">Employed</Form.Label>
+                    </Form.Item>
+                    <Form.Item className="flex items-center space-x-2 space-y-0">
+                      <Form.Control>
                         <RadioGroup.Item value="selfEmployed" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
+                      </Form.Control>
+                      <Form.Label className="font-normal">
                         Self-Employed
-                      </FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
+                      </Form.Label>
+                    </Form.Item>
+                    <Form.Item className="flex items-center space-x-2 space-y-0">
+                      <Form.Control>
                         <RadioGroup.Item value="unemployed" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Unemployed</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
+                      </Form.Control>
+                      <Form.Label className="font-normal">
+                        Unemployed
+                      </Form.Label>
+                    </Form.Item>
+                    <Form.Item className="flex items-center space-x-2 space-y-0">
+                      <Form.Control>
                         <RadioGroup.Item value="student" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Student</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
+                      </Form.Control>
+                      <Form.Label className="font-normal">Student</Form.Label>
+                    </Form.Item>
+                    <Form.Item className="flex items-center space-x-2 space-y-0">
+                      <Form.Control>
                         <RadioGroup.Item value="retired" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Retired</FormLabel>
-                    </FormItem>
+                      </Form.Control>
+                      <Form.Label className="font-normal">Retired</Form.Label>
+                    </Form.Item>
                   </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
-          />
+          /> */}
         </Card.Content>
       </Card>
 
       {/* Conditional card. based on employment status */}
-      <EmployedOrSelfEmployed />
+      {/* <EmployedOrSelfEmployed /> */}
 
       <Card>
         <Card.Header>
@@ -182,10 +183,10 @@ export default function ProfessionalInfoForm() {
       </Card>
 
       {/* Career advice based on inputs - computed content */}
-      <CareerInsights />
+      {/* <CareerInsights /> */}
 
       {/* Profile completion indicator - computed field */}
-      <Indicator />
+      {/* <Indicator /> */}
     </div>
   )
 }
@@ -205,63 +206,67 @@ function EmployedOrSelfEmployed() {
           <Card.Title className="text-xl">Employment Details</Card.Title>
         </Card.Header>
         <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="profession"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Profession</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Profession</Form.Label>
+                <Form.Control>
                   <Input placeholder="Software Engineer" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="jobTitle"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job Title</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Job Title</Form.Label>
+                <Form.Control>
                   <Input
                     placeholder="Senior Developer"
                     {...field}
                     value={field.value ?? ''}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="company"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Company</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Company</Form.Label>
+                <Form.Control>
                   <Input
                     placeholder="Example Corp"
                     {...field}
                     value={field.value ?? ''}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="yearsOfExperience"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Years of Experience</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Years of Experience</Form.Label>
+                <Form.Control>
                   <div className="flex items-center space-x-4">
                     <Slider
                       value={[Number.parseInt(field.value || '0')]}
@@ -274,35 +279,36 @@ function EmployedOrSelfEmployed() {
                     />
                     <span className="w-12 text-center">{field.value || 0}</span>
                   </div>
-                </FormControl>
-                <FormDescription>
+                </Form.Control>
+                <Form.Description>
                   Years of professional experience in your field
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
+                </Form.Description>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
           {/* Computed field: Experience Level */}
-          <FormItem>
-            <FormLabel>Experience Level</FormLabel>
-            <FormControl>
+          {/* <Form.Item>
+            <Form.Label>Experience Level</Form.Label>
+            <Form.Control>
               <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
                 <span>{experienceLevel.value}</span>
               </div>
-            </FormControl>
-            <FormDescription>
+            </Form.Control>
+            <Form.Description>
               Automatically determined based on years of experience
-            </FormDescription>
-          </FormItem>
+            </Form.Description>
+          </Form.Item> */}
 
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name="annualIncome"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Annual Income</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Annual Income</Form.Label>
+                <Form.Control>
                   <Input
                     placeholder="$50,000"
                     {...field}
@@ -312,14 +318,14 @@ function EmployedOrSelfEmployed() {
                     }}
                     value={field.value ?? ''}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
           {/* Computed field: Estimated Tax */}
-          <EstimatedTax />
+          {/* <EstimatedTax /> */}
         </Card.Content>
       </Card>
     )
@@ -364,17 +370,17 @@ function EstimatedTax() {
 
   return (
     annualIncome && (
-      <FormItem>
-        <FormLabel>Estimated Annual Tax</FormLabel>
-        <FormControl>
+      <Form.Item>
+        <Form.Label>Estimated Annual Tax</Form.Label>
+        <Form.Control>
           <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
             {taxEstimate || 'Enter annual income'}
           </div>
-        </FormControl>
-        <FormDescription>
+        </Form.Control>
+        <Form.Description>
           Simple estimate based on progressive tax brackets
-        </FormDescription>
-      </FormItem>
+        </Form.Description>
+      </Form.Item>
     )
   )
 }
@@ -392,7 +398,7 @@ function SkillFields() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <FormLabel>Skills</FormLabel>
+        <Form.Label>Skills</Form.Label>
         <Button
           type="button"
           variant="outline"
@@ -406,19 +412,20 @@ function SkillFields() {
 
       {skillFields.map((field, index) => (
         <div key={field.id} className="flex items-center gap-2">
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name={`skills.${index}.value`}
             render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormControl>
+              <Form.Item className="flex-1">
+                <Form.Control>
                   <Input
                     placeholder="e.g., JavaScript, Project Management, Design"
                     {...field}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
@@ -450,7 +457,7 @@ function LanguageFields() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <FormLabel>Languages</FormLabel>
+        <Form.Label>Languages</Form.Label>
         <Button
           type="button"
           variant="outline"
@@ -466,37 +473,39 @@ function LanguageFields() {
 
       {languageFields.map((field, index) => (
         <div key={field.id} className="grid grid-cols-3 gap-4 items-start">
-          <FormField
+          <Form.Field
             control={control}
+            formState$={formState$}
             name={`languages.${index}.language`}
             render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormControl>
+              <Form.Item className="col-span-2">
+                <Form.Control>
                   <Input
                     placeholder="e.g., English, Spanish, French"
                     {...field}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
 
           <div className="flex items-center gap-2">
-            <FormField
+            <Form.Field
               control={control}
+              formState$={formState$}
               name={`languages.${index}.proficiency`}
               render={({ field }) => (
-                <FormItem className="flex-1">
+                <Form.Item className="flex-1">
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <FormControl>
+                    <Form.Control>
                       <Select.Trigger>
                         <Select.Value placeholder="Proficiency" />
                       </Select.Trigger>
-                    </FormControl>
+                    </Form.Control>
                     <Select.Content>
                       <Select.Item value="beginner">Beginner</Select.Item>
                       <Select.Item value="intermediate">
@@ -506,8 +515,8 @@ function LanguageFields() {
                       <Select.Item value="native">Native</Select.Item>
                     </Select.Content>
                   </Select>
-                  <FormMessage />
-                </FormItem>
+                  <Form.Message />
+                </Form.Item>
               )}
             />
 
