@@ -7,7 +7,6 @@ import { Button, Calendar, RadioGroup } from '@/components/ui'
 import { Form } from '@/features/forms/ui/form'
 import { formState$ } from '@/features/forms/user/subscribe'
 import { signal, computed } from '@preact/signals-react'
-import { useSignals } from '@preact/signals-react/runtime'
 
 const firstName = signal('')
 const lastName = signal('')
@@ -146,13 +145,13 @@ export default function PersonalInfoForm() {
                   </Popover.Trigger>
                   <Popover.Content className="w-auto p-0" align="start">
                     <Calendar
+                      autoFocus
                       mode="single"
                       selected={field.value ?? undefined}
                       onSelect={field.onChange}
                       disabled={(date) =>
                         date > new Date() || date < new Date('1900-01-01')
                       }
-                      initialFocus
                     />
                   </Popover.Content>
                 </Popover>
@@ -380,14 +379,12 @@ export default function PersonalInfoForm() {
 }
 
 function AgeField() {
-  useSignals()
-
   return (
     <div id="age" className="grid gap-2">
       <Label htmlFor="age">Age</Label>
       <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
         {age.value !== null ? (
-          <span>{age.value} years old</span>
+          <span>{age} years old</span>
         ) : (
           <span className="text-muted-foreground">Enter date of birth</span>
         )}
@@ -400,28 +397,26 @@ function AgeField() {
 }
 
 function FullNameField() {
-  useSignals()
-
   return (
     <div id="full-name" className="grid gap-2">
       <Label htmlFor="full-name">Full Name</Label>
       <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
         {firstName.value && lastName.value ? (
-          <span>{fullName.value}</span>
+          <span>{fullName}</span>
         ) : (
           <span className="text-muted-foreground">
             Enter first and last name
           </span>
         )}
       </div>
-      <p>Automatically created from first and last name</p>
+      <p className="text-muted-foreground text-sm">
+        Automatically created from first and last name
+      </p>
     </div>
   )
 }
 
 function Indicator() {
-  useSignals()
-
   return (
     <div className="bg-muted rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">

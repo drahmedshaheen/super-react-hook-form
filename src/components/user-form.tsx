@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Card, Button, Tabs } from '@/components/ui'
 import { toast } from 'sonner'
@@ -8,7 +7,6 @@ import { formControl, control } from '@/features/forms/user'
 import { DevTool } from '@hookform/devtools'
 import { Form } from '@/features/forms/ui/form'
 import { signal } from '@preact/signals-react'
-import { useSignals } from '@preact/signals-react/runtime'
 
 import PersonalInfoForm from '@/components/forms/personal-info-form'
 import ProfessionalInfoForm from '@/components/forms/professional-info-form'
@@ -62,8 +60,6 @@ const onSubmit = (data: UserFormValues) => {
 
 export default function UserForm() {
   useForm({ formControl })
-
-  useSignals()
 
   return (
     <Form onSubmit={formControl.handleSubmit(onSubmit)}>

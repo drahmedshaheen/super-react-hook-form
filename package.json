@@ -44,6 +44,7 @@
     "@biomejs/biome": "1.9.4",
     "@eslint/js": "^9.22.0",
     "@hookform/devtools": "^4.4.0",
+    "@preact/signals-react-transform": "^0.5.1",
     "@types/node": "^22.14.1",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

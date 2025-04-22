@@ -1,33 +1,24 @@
-import { useFieldArray } from 'react-hook-form'
 import { formControl, control } from '@/features/forms/user'
 import { Card, Alert, Button, RadioGroup, Label } from '@/components/ui'
 import { Input, Select, Badge, Slider, Separator } from '@/components/ui'
 import { Plus, Trash, AlertCircle } from 'lucide-react'
 import { signal, computed } from '@preact/signals-react'
-import { useSignals } from '@preact/signals-react/runtime'
 import { Form } from '@/features/forms/ui/form'
 import { formState$ } from '@/features/forms/user/subscribe'
 import type { UserFormInput } from '@/features/forms/user/schema'
 
 // Watch values for computed fields
-
-const profession = signal('Junior')
-const yearsOfExperience = signal('Junior')
+const profession = signal('')
+const yearsOfExperience = signal('0')
 const experienceLevel = computed(() => {
-  if (!yearsOfExperience.value) return 'Not Specified'
   const years = Number.parseInt(yearsOfExperience.value)
-  let level = 'Entry Level'
-
-  if (years >= 10) {
-    level = 'Senior'
-  } else if (years >= 5) {
-    level = 'Mid-Level'
-  } else if (years >= 2) {
-    level = 'Junior'
-  }
-
-  return level
+  if (Number.isNaN(years)) return 'Not Specified'
+  if (years >= 10) return 'Senior'
+  if (years >= 5) return 'Mid-Level'
+  if (years >= 2) return 'Junior'
+  return 'Entry Level'
 })
+
 const employmentStatus = signal<UserFormInput['employmentStatus']>(null)
 const isEmployed = computed(
   () =>
@@ -233,11 +224,159 @@ export default function ProfessionalInfoForm() {
           <Card.Title className="text-xl">Skills & Languages</Card.Title>
         </Card.Header>
         <Card.Content className="space-y-6">
-          <SkillFields />
+          <Form.FieldArray
+            control={control}
+            name="skills"
+            render={({
+              fields: skillFields,
+              append: appendSkill,
+              remove: removeSkill,
+            }) => (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label>Skills</Label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => appendSkill({ value: '' })}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Skill
+                  </Button>
+                </div>
+
+                {skillFields.map((field, index) => (
+                  <div key={field.id} className="flex items-center gap-2">
+                    <Form.Field
+                      control={control}
+                      formState$={formState$}
+                      name={`skills.${index}.value`}
+                      render={({ field }) => (
+                        <Form.Item className="flex-1">
+                          <Form.Control>
+                            <Input
+                              placeholder="e.g., JavaScript, Project Management, Design"
+                              {...field}
+                            />
+                          </Form.Control>
+                          <Form.Message />
+                        </Form.Item>
+                      )}
+                    />
+
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeSkill(index)}
+                      disabled={skillFields.length === 1}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          />
 
           <Separator />
 
-          <LanguageFields />
+          <Form.FieldArray
+            control={control}
+            name="languages"
+            render={({
+              fields: languageFields,
+              append: appendLanguage,
+              remove: removeLanguage,
+            }) => (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label>Languages</Label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      appendLanguage({ language: '', proficiency: 'beginner' })
+                    }
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Language
+                  </Button>
+                </div>
+
+                {languageFields.map((field, index) => (
+                  <div
+                    key={field.id}
+                    className="grid grid-cols-3 gap-4 items-start"
+                  >
+                    <Form.Field
+                      control={control}
+                      formState$={formState$}
+                      name={`languages.${index}.language`}
+                      render={({ field }) => (
+                        <Form.Item className="col-span-2">
+                          <Form.Control>
+                            <Input
+                              placeholder="e.g., English, Spanish, French"
+                              {...field}
+                            />
+                          </Form.Control>
+                          <Form.Message />
+                        </Form.Item>
+                      )}
+                    />
+
+                    <div className="flex items-center gap-2">
+                      <Form.Field
+                        control={control}
+                        formState$={formState$}
+                        name={`languages.${index}.proficiency`}
+                        render={({ field }) => (
+                          <Form.Item className="flex-1">
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <Form.Control>
+                                <Select.Trigger>
+                                  <Select.Value placeholder="Proficiency" />
+                                </Select.Trigger>
+                              </Form.Control>
+                              <Select.Content>
+                                <Select.Item value="beginner">
+                                  Beginner
+                                </Select.Item>
+                                <Select.Item value="intermediate">
+                                  Intermediate
+                                </Select.Item>
+                                <Select.Item value="advanced">
+                                  Advanced
+                                </Select.Item>
+                                <Select.Item value="native">Native</Select.Item>
+                              </Select.Content>
+                            </Select>
+                            <Form.Message />
+                          </Form.Item>
+                        )}
+                      />
+
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeLanguage(index)}
+                        disabled={languageFields.length === 1}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          />
         </Card.Content>
       </Card>
 
@@ -251,8 +390,6 @@ export default function ProfessionalInfoForm() {
 }
 
 function EmployedOrSelfEmployed() {
-  useSignals()
-
   return (
     isEmployed.value && (
       <Card>
@@ -343,7 +480,15 @@ function EmployedOrSelfEmployed() {
           />
 
           {/* Computed field: Experience Level */}
-          <ExperienceLevel />
+          <div id="experience-level" className="grid gap-2">
+            <Label htmlFor="experience-level">Experience Level</Label>
+            <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
+              <span>{experienceLevel}</span>
+            </div>
+            <p className="text-muted-foreground text-sm">
+              Automatically determined based on years of experience
+            </p>
+          </div>
 
           <Form.Field
             control={control}
@@ -376,190 +521,25 @@ function EmployedOrSelfEmployed() {
   )
 }
 
-function ExperienceLevel() {
-  useSignals()
-
-  return (
-    <div id="experience-level" className="grid gap-2">
-      <Label htmlFor="experience-level">Experience Level</Label>
-      <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-        <span>{experienceLevel.value}</span>
-      </div>
-      <p className="text-muted-foreground text-sm">
-        Automatically determined based on years of experience
-      </p>
-    </div>
-  )
-}
-
 function EstimatedTax() {
-  useSignals()
-
   return (
     annualIncome.value && (
-      <Form.Item>
-        <Form.Label>Estimated Annual Tax</Form.Label>
-        <Form.Control>
-          <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-            {taxEstimate.value || 'Enter annual income'}
-          </div>
-        </Form.Control>
-        <Form.Description>
+      <div id="estimated-annual-tax" className="grid gap-2">
+        <Label htmlFor="estimated-annual-tax">Estimated Annual Tax</Label>
+
+        <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
+          {taxEstimate.value || 'Enter annual income'}
+        </div>
+
+        <p className="text-muted-foreground text-sm">
           Simple estimate based on progressive tax brackets
-        </Form.Description>
-      </Form.Item>
+        </p>
+      </div>
     )
   )
 }
 
-function SkillFields() {
-  const {
-    fields: skillFields,
-    append: appendSkill,
-    remove: removeSkill,
-  } = useFieldArray({ control, name: 'skills' })
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Label>Skills</Label>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => appendSkill({ value: '' })}
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Skill
-        </Button>
-      </div>
-
-      {skillFields.map((field, index) => (
-        <div key={field.id} className="flex items-center gap-2">
-          <Form.Field
-            control={control}
-            formState$={formState$}
-            name={`skills.${index}.value`}
-            render={({ field }) => (
-              <Form.Item className="flex-1">
-                <Form.Control>
-                  <Input
-                    placeholder="e.g., JavaScript, Project Management, Design"
-                    {...field}
-                  />
-                </Form.Control>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => removeSkill(index)}
-            disabled={skillFields.length === 1}
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function LanguageFields() {
-  const {
-    fields: languageFields,
-    append: appendLanguage,
-    remove: removeLanguage,
-  } = useFieldArray({ control, name: 'languages' })
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Label>Languages</Label>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            appendLanguage({ language: '', proficiency: 'beginner' })
-          }
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Language
-        </Button>
-      </div>
-
-      {languageFields.map((field, index) => (
-        <div key={field.id} className="grid grid-cols-3 gap-4 items-start">
-          <Form.Field
-            control={control}
-            formState$={formState$}
-            name={`languages.${index}.language`}
-            render={({ field }) => (
-              <Form.Item className="col-span-2">
-                <Form.Control>
-                  <Input
-                    placeholder="e.g., English, Spanish, French"
-                    {...field}
-                  />
-                </Form.Control>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-
-          <div className="flex items-center gap-2">
-            <Form.Field
-              control={control}
-              formState$={formState$}
-              name={`languages.${index}.proficiency`}
-              render={({ field }) => (
-                <Form.Item className="flex-1">
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <Form.Control>
-                      <Select.Trigger>
-                        <Select.Value placeholder="Proficiency" />
-                      </Select.Trigger>
-                    </Form.Control>
-                    <Select.Content>
-                      <Select.Item value="beginner">Beginner</Select.Item>
-                      <Select.Item value="intermediate">
-                        Intermediate
-                      </Select.Item>
-                      <Select.Item value="advanced">Advanced</Select.Item>
-                      <Select.Item value="native">Native</Select.Item>
-                    </Select.Content>
-                  </Select>
-                  <Form.Message />
-                </Form.Item>
-              )}
-            />
-
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => removeLanguage(index)}
-              disabled={languageFields.length === 1}
-            >
-              <Trash className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 function CareerInsights() {
-  useSignals()
-
   return (
     employmentStatus.value &&
     profession.value &&
@@ -583,8 +563,6 @@ function CareerInsights() {
 }
 
 function Indicator() {
-  useSignals()
-
   return (
     <div className="bg-muted rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
