@@ -5,7 +5,6 @@ import type {
   FieldPath,
   FieldValues,
   ControllerRenderProps,
-  FieldArrayPath,
 } from 'react-hook-form'
 
 import { cn } from '@/lib/utils'
@@ -15,23 +14,11 @@ import type {
   ControllerProps,
   ControllerFieldState,
 } from '../shared/controller'
-import type { FieldArrayProps } from '../shared/field-array'
+import { FieldArray } from '../shared/field-array'
 import type { UseFormStateReturn } from '../shared/useFormState'
 import { useController } from '../shared/useController'
 
-import { useFieldArray } from '../shared/useFieldArray'
-
 const Form = (props: React.ComponentProps<'form'>) => <form {...props} />
-
-// TODO render children as collection where each element has its id and index in react fragment
-export const FormFieldArray = <
-  TFieldValues extends FieldValues = FieldValues,
-  TFieldArrayName extends
-    FieldArrayPath<TFieldValues> = FieldArrayPath<TFieldValues>,
-  TKeyName extends string = 'id',
->(
-  props: FieldArrayProps<TFieldValues, TFieldArrayName, TKeyName>,
-) => props.render(useFieldArray<TFieldValues, TFieldArrayName, TKeyName>(props))
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -179,6 +166,6 @@ Form.Label = FormLabel
 Form.Control = FormControl
 Form.Description = FormDescription
 Form.Message = FormMessage
-Form.FieldArray = FormFieldArray
+Form.FieldArray = FieldArray
 
 export { Form }

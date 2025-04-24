@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useController as _useController } from 'react-hook-form'
 import type {
   FieldValues,
@@ -30,7 +30,6 @@ export const useController = <
     ...props,
   } satisfies _UseControllerProps<TFieldValues, TName>)
 
-  const modifiedField = { ...field, onChange, onBlur }
   const modifiedFormState = useFormState({ name: field.name, formState$ })
   const modifiedFieldState = useMemo(
     () =>
@@ -47,25 +46,35 @@ export const useController = <
     [modifiedFormState, fieldState, field.name],
   )
 
-  function onChange(...event: any[]) {
-    const typingFields = createNestedObject(stringToPath(field.name), true)
+  const onChange = useCallback(
+    (...event: any[]) => {
+      const typingFields = createNestedObject(stringToPath(field.name), true)
 
-    formState$.next({ ...formState$.getValue(), isTyping: true, typingFields })
-    return field.onChange(...event)
-  }
+      formState$.next({
+        ...formState$.getValue(),
+        isTyping: true,
+        typingFields,
+      })
+      return field.onChange(...event)
+    },
+    [field.name, field.onChange, formState$],
+  )
 
-  function onBlur() {
+  const onBlur = useCallback(() => {
     formState$.next({
       ...formState$.getValue(),
       isTyping: false,
       typingFields: {},
     })
     return field.onBlur()
-  }
+  }, [field.onBlur, formState$])
 
-  return {
-    field: modifiedField,
-    fieldState: modifiedFieldState,
-    formState: modifiedFormState,
-  }
+  return useMemo(
+    () => ({
+      field: { ...field, onChange, onBlur },
+      fieldState: modifiedFieldState,
+      formState: modifiedFormState,
+    }),
+    [field, onChange, onBlur, modifiedFieldState, modifiedFormState],
+  )
 }

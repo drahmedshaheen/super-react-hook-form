@@ -10,9 +10,9 @@ import type {
   UseFieldArrayRemove,
   UseFieldArrayReplace,
   UseFieldArrayUpdate,
+  UseFieldArrayProps,
 } from 'react-hook-form'
-
-import { useFieldArray, type UseFieldArrayProps } from './useFieldArray'
+import { useFieldArray } from 'react-hook-form'
 
 export type FieldArrayProps<
   TFieldValues extends FieldValues = FieldValues,
