@@ -1,13 +1,9 @@
-import React, { Suspense } from 'react'
 import { useForm } from 'react-hook-form'
 import { Card, Button, Tabs } from '@/components/ui'
 import { toast } from 'sonner'
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react'
-import type {
-  UserFormInput,
-  UserFormValues,
-} from '@/features/forms/user/schema'
-import { formControl, control } from '@/features/forms/user'
+import type { UserFormValues } from '@/features/forms/user/schema'
+import { formControl } from '@/features/forms/user'
 
 import { Form } from '@/features/forms/ui/form'
 import { signal } from '@preact/signals-react'
@@ -16,13 +12,6 @@ import PersonalInfoForm from '@/components/forms/personal-info-form'
 import ProfessionalInfoForm from '@/components/forms/professional-info-form'
 import FormSummary from '@/components/forms/form-summary'
 
-const DevTool = React.lazy(() =>
-  import('@hookform/devtools').then((mod) => ({
-    default: mod.DevTool<UserFormInput>,
-  })),
-)
-
-const showDevTools = signal(false)
 const activeTab = signal('personal')
 
 const nextTab = () => {
@@ -124,21 +113,6 @@ export default function UserForm() {
           </Card.Content>
         </Tabs>
       </Card>
-      <Button
-        type="button"
-        variant="outline"
-        className="mb-4"
-        onClick={() => {
-          showDevTools.value = !showDevTools.value
-        }}
-      >
-        {showDevTools.value ? 'Hide DevTools' : 'Show DevTools'}
-      </Button>
-      {showDevTools.value && (
-        <Suspense fallback={null}>
-          <DevTool control={control} />
-        </Suspense>
-      )}
     </Form>
   )
 }

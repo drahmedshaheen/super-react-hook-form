@@ -78,7 +78,7 @@ export default function ProfessionalInfoForm() {
         <Card.Header>
           <Card.Title className="text-xl">Education & Experience</Card.Title>
         </Card.Header>
-        <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card.Content className="grid grid-cols-1 md:grid-cols-2 items-start gap-6">
           <Form.Field
             control={control}
             formState$={formState$}
@@ -396,7 +396,7 @@ function EmployedOrSelfEmployed() {
         <Card.Header>
           <Card.Title className="text-xl">Employment Details</Card.Title>
         </Card.Header>
-        <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card.Content className="grid grid-cols-1 md:grid-cols-2 items-start gap-6">
           <Form.Field
             control={control}
             formState$={formState$}

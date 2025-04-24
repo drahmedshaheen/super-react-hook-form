@@ -53,7 +53,7 @@ export default function PersonalInfoForm() {
         <Card.Header>
           <Card.Title className="text-xl">Basic Information</Card.Title>
         </Card.Header>
-        <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card.Content className="grid grid-cols-1 md:grid-cols-2 items-start gap-6">
           <Form.Field
             control={control}
             formState$={formState$}
@@ -220,7 +220,7 @@ export default function PersonalInfoForm() {
         <Card.Header>
           <Card.Title className="text-xl">Address & Identification</Card.Title>
         </Card.Header>
-        <Card.Content className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card.Content className="grid grid-cols-1 md:grid-cols-2 items-start gap-6">
           <Form.Field
             control={control}
             formState$={formState$}
