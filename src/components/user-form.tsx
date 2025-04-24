@@ -1,12 +1,10 @@
 import { useForm } from 'react-hook-form'
-import { Card, Button, Tabs } from '@/components/ui'
+import { signal } from '@preact/signals-react'
+import { Card, Button, Tabs, Form } from '@/components/ui'
 import { toast } from 'sonner'
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react'
 import type { UserFormValues } from '@/features/forms/user/schema'
 import { formControl } from '@/features/forms/user'
-
-import { Form } from '@/features/forms/ui/form'
-import { signal } from '@preact/signals-react'
 
 import PersonalInfoForm from '@/components/forms/personal-info-form'
 import ProfessionalInfoForm from '@/components/forms/professional-info-form'

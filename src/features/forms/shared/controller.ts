@@ -2,15 +2,14 @@ import type {
   FieldValues,
   FieldPath,
   ControllerRenderProps,
-  ControllerFieldState as _ControllerFieldState,
 } from 'react-hook-form'
 
-import { useController, type UseControllerProps } from './useController'
+import {
+  useController,
+  type UseControllerProps,
+  type ControllerFieldState,
+} from './useController'
 import type { UseFormStateReturn } from './useFormState'
-
-export type ControllerFieldState = _ControllerFieldState & {
-  isTyping: boolean
-}
 
 export type ControllerProps<
   TFieldValues extends FieldValues = FieldValues,

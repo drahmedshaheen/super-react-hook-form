@@ -3,7 +3,7 @@ import { useController as _useController } from 'react-hook-form'
 import type {
   FieldValues,
   FieldPath,
-  ControllerFieldState,
+  ControllerFieldState as _ControllerFieldState,
   UseControllerProps as _UseControllerProps,
 } from 'react-hook-form'
 import type { BehaviorSubject } from 'rxjs'
@@ -11,6 +11,10 @@ import type { BehaviorSubject } from 'rxjs'
 import { createNestedObject, stringToPath, get } from '../utils/object'
 
 import { useFormState, type FormState } from './useFormState'
+
+export type ControllerFieldState = _ControllerFieldState & {
+  isTyping: boolean
+}
 
 export type UseControllerProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -42,7 +46,7 @@ export const useController = <
             get: () => get(modifiedFormState.typingFields, field.name),
           },
         },
-      ) as ControllerFieldState & { isTyping: boolean },
+      ) as ControllerFieldState,
     [modifiedFormState, fieldState, field.name],
   )
 

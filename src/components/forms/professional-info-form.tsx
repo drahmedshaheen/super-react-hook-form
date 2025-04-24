@@ -1,9 +1,8 @@
 import { formControl, control } from '@/features/forms/user'
-import { Card, Alert, Button, RadioGroup, Label } from '@/components/ui'
+import { Card, Alert, Button, RadioGroup, Label, Form } from '@/components/ui'
 import { Input, Select, Badge, Slider, Separator } from '@/components/ui'
 import { Plus, Trash, AlertCircle } from 'lucide-react'
 import { signal, computed } from '@preact/signals-react'
-import { Form } from '@/features/forms/ui/form'
 import { formState$ } from '@/features/forms/user/subscribe'
 import type { UserFormInput } from '@/features/forms/user/schema'
 
