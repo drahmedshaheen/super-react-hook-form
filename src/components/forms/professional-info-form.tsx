@@ -479,15 +479,17 @@ function EmployedOrSelfEmployed() {
           />
 
           {/* Computed field: Experience Level */}
-          <div id="experience-level" className="grid gap-2">
-            <Label htmlFor="experience-level">Experience Level</Label>
-            <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-              <span>{experienceLevel}</span>
-            </div>
-            <p className="text-muted-foreground text-sm">
+          <Form.Item>
+            <Form.Label>Experience Level</Form.Label>
+            <Form.Control>
+              <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
+                <span>{experienceLevel}</span>
+              </div>
+            </Form.Control>
+            <Form.Description>
               Automatically determined based on years of experience
-            </p>
-          </div>
+            </Form.Description>
+          </Form.Item>
 
           <Form.Field
             control={control}
@@ -523,17 +525,17 @@ function EmployedOrSelfEmployed() {
 function EstimatedTax() {
   return (
     annualIncome.value && (
-      <div id="estimated-annual-tax" className="grid gap-2">
-        <Label htmlFor="estimated-annual-tax">Estimated Annual Tax</Label>
-
-        <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-          {taxEstimate.value || 'Enter annual income'}
-        </div>
-
-        <p className="text-muted-foreground text-sm">
+      <Form.Item>
+        <Form.Label>Estimated Annual Tax</Form.Label>
+        <Form.Control>
+          <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
+            {taxEstimate.value || 'Enter annual income'}
+          </div>
+        </Form.Control>
+        <Form.Description>
           Simple estimate based on progressive tax brackets
-        </p>
-      </div>
+        </Form.Description>
+      </Form.Item>
     )
   )
 }

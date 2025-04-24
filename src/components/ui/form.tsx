@@ -21,9 +21,19 @@ type FormFieldContextValue<
   fieldState: ControllerFieldState
 }
 
-const FormFieldContext = createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
-)
+const defaultFieldState: ControllerFieldState = {
+  isValidating: false,
+  isTyping: false,
+  isTouched: false,
+  isDirty: false,
+  invalid: false,
+  error: undefined,
+}
+
+const FormFieldContext = createContext<FormFieldContextValue>({
+  name: undefined as any,
+  fieldState: defaultFieldState,
+})
 
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
@@ -45,8 +55,8 @@ const useFormField = () => {
   const fieldContext = useContext(FormFieldContext)
   const itemContext = useContext(FormItemContext)
 
-  if (!fieldContext) {
-    throw new Error('useFormField should be used within <FormField>')
+  if (!itemContext) {
+    throw new Error('useFormField should be used within <Form.Item>')
   }
 
   const { id } = itemContext
@@ -61,6 +71,10 @@ const useFormField = () => {
     }),
     [id, fieldContext.name],
   )
+
+  if (!fieldContext) {
+    throw new Error('useFormField should be used within <FormField>')
+  }
 
   return useMemo(
     () =>

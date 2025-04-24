@@ -2,7 +2,7 @@ import { formControl, control } from '@/features/forms/user'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
-import { Card, Select, Badge, Input, Popover, Label } from '@/components/ui'
+import { Card, Select, Badge, Input, Popover } from '@/components/ui'
 import { Button, Calendar, RadioGroup, Form } from '@/components/ui'
 import { formState$ } from '@/features/forms/user/subscribe'
 import { signal, computed } from '@preact/signals-react'
@@ -379,39 +379,43 @@ export default function PersonalInfoForm() {
 
 function AgeField() {
   return (
-    <div id="age" className="grid gap-2">
-      <Label htmlFor="age">Age</Label>
-      <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-        {age.value !== null ? (
-          <span>{age} years old</span>
-        ) : (
-          <span className="text-muted-foreground">Enter date of birth</span>
-        )}
-      </div>
-      <p className="text-muted-foreground text-sm">
+    <Form.Item>
+      <Form.Label>Age</Form.Label>
+      <Form.Control>
+        <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
+          {age.value !== null ? (
+            <span>{age} years old</span>
+          ) : (
+            <span className="text-muted-foreground">Enter date of birth</span>
+          )}
+        </div>
+      </Form.Control>
+      <Form.Description>
         Automatically calculated from your date of birth
-      </p>
-    </div>
+      </Form.Description>
+    </Form.Item>
   )
 }
 
 function FullNameField() {
   return (
-    <div id="full-name" className="grid gap-2">
-      <Label htmlFor="full-name">Full Name</Label>
-      <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-        {firstName.value && lastName.value ? (
-          <span>{fullName}</span>
-        ) : (
-          <span className="text-muted-foreground">
-            Enter first and last name
-          </span>
-        )}
-      </div>
-      <p className="text-muted-foreground text-sm">
+    <Form.Item>
+      <Form.Label>Full Name</Form.Label>
+      <Form.Control>
+        <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
+          {firstName.value && lastName.value ? (
+            <span>{fullName}</span>
+          ) : (
+            <span className="text-muted-foreground">
+              Enter first and last name
+            </span>
+          )}
+        </div>
+      </Form.Control>
+      <Form.Description>
         Automatically created from first and last name
-      </p>
-    </div>
+      </Form.Description>
+    </Form.Item>
   )
 }
 
