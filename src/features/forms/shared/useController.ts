@@ -8,7 +8,7 @@ import type {
 } from 'react-hook-form'
 import type { BehaviorSubject } from 'rxjs'
 
-import { createNestedObject, stringToPath, get } from '../utils/object'
+import { createNestedObject, stringToPath, getValue } from '../utils/object'
 
 import { useFormState, type FormState } from './useFormState'
 
@@ -43,7 +43,7 @@ export const useController = <
           ...Object.getOwnPropertyDescriptors(fieldState),
           isTyping: {
             enumerable: true,
-            get: () => get(modifiedFormState.typingFields, field.name),
+            get: () => getValue(modifiedFormState.typingFields, field.name),
           },
         },
       ) as ControllerFieldState,

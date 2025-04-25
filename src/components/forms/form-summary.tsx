@@ -1,39 +1,8 @@
-import type { UserFormValues } from '@/features/forms/user/schema'
 import { getValues } from '@/features/forms/user'
 import { format } from 'date-fns'
 import { Card, Badge, Separator } from '@/components/ui'
 import { cn } from '@/lib/utils'
-
-// Calculate age
-const calculateAge = (birthDate: Date) => {
-  const today = new Date()
-  let age = today.getFullYear() - birthDate.getFullYear()
-  const monthDiff = today.getMonth() - birthDate.getMonth()
-
-  if (
-    monthDiff < 0 ||
-    (monthDiff === 0 && today.getDate() < birthDate.getDate())
-  ) {
-    age--
-  }
-
-  return age
-}
-
-// Calculate experience level
-const getExperienceLevel = (years: string) => {
-  const yearsNum = Number.parseInt(years)
-
-  if (yearsNum >= 10) return 'Senior'
-  if (yearsNum >= 5) return 'Mid-Level'
-  if (yearsNum >= 2) return 'Junior'
-  return 'Entry Level'
-}
-
-// Format address
-const formatAddress = (address: UserFormValues['address']) => {
-  return `${address.street}, ${address.city}, ${address.state} ${address.zipCode}, ${address.country}`
-}
+import { calculateAge, getExperienceLevel, formatAddress } from './calculations'
 
 export default function FormSummary() {
   const values = getValues()

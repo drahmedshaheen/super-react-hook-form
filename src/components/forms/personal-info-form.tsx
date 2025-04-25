@@ -1,49 +1,17 @@
-import { formControl, control } from '@/features/forms/user'
+import { control } from '@/features/forms/user'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { Card, Select, Badge, Input, Popover } from '@/components/ui'
 import { Button, Calendar, RadioGroup, Form } from '@/components/ui'
 import { formState$ } from '@/features/forms/user/subscribe'
-import { signal, computed } from '@preact/signals-react'
-
-const firstName = signal('')
-const lastName = signal('')
-const fullName = computed(() => `${firstName} ${lastName}`)
-
-const dateOfBirth = signal<Date | null>(null)
-const age = computed<number | null>(() => {
-  if (!dateOfBirth.value) return null
-  const today = new Date()
-  const birthDate = new Date(dateOfBirth.value)
-  let calculatedAge = today.getFullYear() - birthDate.getFullYear()
-  const monthDiff = today.getMonth() - birthDate.getMonth()
-
-  if (
-    monthDiff < 0 ||
-    (monthDiff === 0 && today.getDate() < birthDate.getDate())
-  ) {
-    calculatedAge--
-  }
-
-  return calculatedAge
-})
-
-formControl.subscribe({
-  formState: {
-    isDirty: true,
-    values: true,
-  },
-  callback: (formState) => {
-    firstName.value = formState.values.firstName
-    lastName.value = formState.values.lastName
-
-    const newDate = formState.values.dateOfBirth
-    const currentDate = dateOfBirth.value
-    const areDatesDifferent = newDate?.getTime() !== currentDate?.getTime()
-    if (areDatesDifferent) dateOfBirth.value = newDate
-  },
-})
+import {
+  age,
+  fullName,
+  isAge,
+  isFullName,
+  isPersonalCompleted,
+} from './signals'
 
 export default function PersonalInfoForm() {
   return (
@@ -383,7 +351,7 @@ function AgeField() {
       <Form.Label>Age</Form.Label>
       <Form.Control>
         <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-          {age.value !== null ? (
+          {isAge.value ? (
             <span>{age} years old</span>
           ) : (
             <span className="text-muted-foreground">Enter date of birth</span>
@@ -403,7 +371,7 @@ function FullNameField() {
       <Form.Label>Full Name</Form.Label>
       <Form.Control>
         <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-          {firstName.value && lastName.value ? (
+          {isFullName.value ? (
             <span>{fullName}</span>
           ) : (
             <span className="text-muted-foreground">
@@ -432,12 +400,12 @@ function Indicator() {
         <div
           className="bg-primary h-full transition-all duration-500 ease-in-out"
           style={{
-            width: `${firstName.value && lastName.value && dateOfBirth.value ? '100%' : '50%'}`,
+            width: `${isPersonalCompleted.value ? '100%' : '50%'}`,
           }}
         />
       </div>
       <p className="text-xs text-muted-foreground mt-2">
-        {firstName.value && lastName.value && dateOfBirth.value
+        {isPersonalCompleted.value
           ? 'Basic information complete! Fill out additional details for a comprehensive profile.'
           : 'Complete all required fields to proceed to the next section.'}
       </p>

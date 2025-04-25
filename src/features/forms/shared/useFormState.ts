@@ -9,7 +9,7 @@ import type {
 import type { BehaviorSubject } from 'rxjs'
 
 import { shallow } from '../utils/shallow'
-import { get } from '../utils/object'
+import { getValue } from '../utils/object'
 
 export type FormState<TFieldValues extends FieldValues> =
   _FormState<TFieldValues> & {
@@ -34,8 +34,8 @@ export const useFormState = <TFieldValues extends FieldValues = FieldValues>({
     formState$.pipe(
       distinctUntilChanged((previous, current) => {
         return shallow(
-          { typingFields: get(previous, `typingFields.${name}`) },
-          { typingFields: get(current, `typingFields.${name}`) },
+          { typingFields: getValue(previous, `typingFields.${name}`) },
+          { typingFields: getValue(current, `typingFields.${name}`) },
         )
       }),
     ),

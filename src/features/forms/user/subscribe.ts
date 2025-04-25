@@ -28,7 +28,7 @@ export const formChanges$ = formState$.pipe(
   pairwise(),
   map(([previous, current]) => ({ previous, current })),
   map((formState) => {
-    // console.log("Form state updated:", formState)
+    // console.log('Form state updated:', formState)
     return formState
   }),
 )

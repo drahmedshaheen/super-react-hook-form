@@ -1,74 +1,18 @@
-import { formControl, control } from '@/features/forms/user'
+import { control } from '@/features/forms/user'
 import { Card, Alert, Button, RadioGroup, Label, Form } from '@/components/ui'
 import { Input, Select, Badge, Slider, Separator } from '@/components/ui'
 import { Plus, Trash, AlertCircle } from 'lucide-react'
-import { signal, computed } from '@preact/signals-react'
 import { formState$ } from '@/features/forms/user/subscribe'
-import type { UserFormInput } from '@/features/forms/user/schema'
-
-// Watch values for computed fields
-const profession = signal('')
-const yearsOfExperience = signal('0')
-const experienceLevel = computed(() => {
-  const years = Number.parseInt(yearsOfExperience.value)
-  if (Number.isNaN(years)) return 'Not Specified'
-  if (years >= 10) return 'Senior'
-  if (years >= 5) return 'Mid-Level'
-  if (years >= 2) return 'Junior'
-  return 'Entry Level'
-})
-
-const employmentStatus = signal<UserFormInput['employmentStatus']>(null)
-const isEmployed = computed(
-  () =>
-    employmentStatus.value === 'employed' ||
-    employmentStatus.value === 'selfEmployed',
-)
-const firstSkillField = signal('')
-const annualIncome = signal<string | null>(null)
-const taxEstimate = computed<string | null>(() => {
-  if (!annualIncome.value) return null
-  const income = Number.parseInt(annualIncome.value.replace(/[^0-9]/g, ''))
-
-  if (Number.isNaN(income)) return null
-
-  // Simple progressive tax calculation for demonstration
-  let taxAmount = 0
-
-  if (income <= 50000) {
-    taxAmount = income * 0.15
-  } else if (income <= 100000) {
-    taxAmount = 7500 + (income - 50000) * 0.25
-  } else {
-    taxAmount = 20000 + (income - 100000) * 0.35
-  }
-
-  return `$${taxAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
-})
-
-formControl.subscribe({
-  formState: {
-    isDirty: true,
-    values: true,
-  },
-  callback: (formState) => {
-    profession.value = formState.values.profession
-    yearsOfExperience.value = formState.values.yearsOfExperience
-    firstSkillField.value = formState.values.skills.at(0)?.value ?? ''
-    employmentStatus.value = formState.values.employmentStatus
-    annualIncome.value = formState.values.annualIncome
-  },
-})
-
-// Function to format currency input
-const formatCurrency = (value: string) => {
-  const onlyNums = value.replace(/[^0-9]/g, '')
-  if (onlyNums) {
-    const numValue = Number.parseInt(onlyNums)
-    return `$${numValue.toLocaleString()}`
-  }
-  return ''
-}
+import { formatCurrency } from './calculations'
+import {
+  experienceLevel,
+  taxEstimate,
+  isAnnualIncome,
+  isEmployed,
+  isProfessionalCompleted,
+  isCareerInsights,
+  careerInsightsMessage,
+} from './signals'
 
 export default function ProfessionalInfoForm() {
   return (
@@ -524,12 +468,12 @@ function EmployedOrSelfEmployed() {
 
 function EstimatedTax() {
   return (
-    annualIncome.value && (
+    isAnnualIncome.value && (
       <Form.Item>
         <Form.Label>Estimated Annual Tax</Form.Label>
         <Form.Control>
           <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-            {taxEstimate.value || 'Enter annual income'}
+            {taxEstimate}
           </div>
         </Form.Control>
         <Form.Description>
@@ -542,22 +486,11 @@ function EstimatedTax() {
 
 function CareerInsights() {
   return (
-    employmentStatus.value &&
-    profession.value &&
-    yearsOfExperience.value && (
+    isCareerInsights.value && (
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <Alert.Title>Career Insights</Alert.Title>
-        <Alert.Description>
-          {experienceLevel.value === 'Entry Level' &&
-            'Consider focusing on building fundamental skills and seeking mentorship opportunities.'}
-          {experienceLevel.value === 'Junior' &&
-            'You have a good foundation. This is a great time to specialize and deepen your expertise.'}
-          {experienceLevel.value === 'Mid-Level' &&
-            'Your experience is valuable. Consider mentoring juniors and taking on leadership responsibilities.'}
-          {experienceLevel.value === 'Senior' &&
-            'Your expertise is significant. Consider consulting, teaching, or pursuing leadership positions.'}
-        </Alert.Description>
+        <Alert.Description>{careerInsightsMessage}</Alert.Description>
       </Alert>
     )
   )
@@ -576,12 +509,12 @@ function Indicator() {
         <div
           className="bg-primary h-full transition-all duration-500 ease-in-out"
           style={{
-            width: `${employmentStatus.value && firstSkillField.value ? '100%' : '50%'}`,
+            width: `${isProfessionalCompleted.value ? '100%' : '50%'}`,
           }}
         />
       </div>
       <p className="text-xs text-muted-foreground mt-2">
-        {employmentStatus.value && firstSkillField.value
+        {isProfessionalCompleted.value
           ? 'Professional information complete! Review your information in the summary.'
           : 'Complete all required fields to build a comprehensive professional profile.'}
       </p>

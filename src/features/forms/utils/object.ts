@@ -13,7 +13,10 @@
  * @param defaultValue - The value to assign at the deepest level.
  * @returns A nested object structure.
  */
-export const createNestedObject = <TValue>(keys: string[], defaultValue: TValue): any => {
+export const createNestedObject = <TValue>(
+  keys: string[],
+  defaultValue: TValue,
+): any => {
   return keys.reduceRight<Record<string, unknown>>(
     (acc, key) => ({ [key]: acc }),
     defaultValue as any,
@@ -32,7 +35,7 @@ export const createNestedObject = <TValue>(keys: string[], defaultValue: TValue)
  */
 export const stringToPath = (input: string): string[] =>
   input
-    .replace(/["|']|\]/g, "")
+    .replace(/["|']|\]/g, '')
     .split(/\.|\[/)
     .filter(Boolean)
 
@@ -56,21 +59,22 @@ export const stringToPath = (input: string): string[] =>
  * @param defaultValue - A fallback value if the property is not found.
  * @returns The retrieved value or the default value.
  */
-export const get = <T extends object, TResult = unknown>(
+export const getValue = <T extends object, TResult = unknown>(
   object?: T,
   path?: string | null,
   defaultValue?: TResult,
 ): TResult | undefined => {
-  if (!path || typeof object !== "object" || object === null) {
+  if (!path || typeof object !== 'object' || object === null) {
     return defaultValue
   }
 
   const result = path
-    .replace(/["|']|\]/g, "")
+    .replace(/["|']|\]/g, '')
     .split(/\.|\[/)
     .filter(Boolean)
     .reduce(
-      (acc: any, key) => (acc && typeof acc === "object" ? acc[key as keyof T] : undefined),
+      (acc: any, key) =>
+        acc && typeof acc === 'object' ? acc[key as keyof T] : undefined,
       object,
     )
 
