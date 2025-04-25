@@ -5,13 +5,8 @@ import { format } from 'date-fns'
 import { Card, Select, Badge, Input, Popover } from '@/components/ui'
 import { Button, Calendar, RadioGroup, Form } from '@/components/ui'
 import { formState$ } from '@/features/forms/user/subscribe'
-import {
-  age,
-  fullName,
-  isAge,
-  isFullName,
-  isPersonalCompleted,
-} from './signals'
+import { age, fullName, isAge, isPersonalCompleted } from './signals'
+import { useFormState } from '@/features/forms/shared/useFormState'
 
 export default function PersonalInfoForm() {
   return (
@@ -366,13 +361,41 @@ function AgeField() {
 }
 
 function FullNameField() {
+  const {
+    values: { firstName },
+    isTyping: firstNameTyping,
+  } = useFormState({
+    name: 'firstName',
+    formState$,
+  })
+
+  const {
+    values: { lastName },
+    isTyping: lastNameTyping,
+  } = useFormState({
+    name: 'lastName',
+    formState$,
+  })
+
   return (
     <Form.Item>
       <Form.Label>Full Name</Form.Label>
       <Form.Control>
         <div className="h-10 px-3 py-2 rounded-md border border-input bg-muted/50 text-muted-foreground flex items-center">
-          {isFullName.value ? (
+          {!!firstName && !!lastName ? (
             <span>{fullName}</span>
+          ) : !!firstName && firstNameTyping ? (
+            <span className="text-muted-foreground">
+              You are typing first name
+            </span>
+          ) : !!lastName && lastNameTyping ? (
+            <span className="text-muted-foreground">
+              You are typing last name
+            </span>
+          ) : !!firstName && !lastName ? (
+            <span className="text-muted-foreground">Enter last name</span>
+          ) : !!lastName && !firstName ? (
+            <span className="text-muted-foreground">Enter first name</span>
           ) : (
             <span className="text-muted-foreground">
               Enter first and last name

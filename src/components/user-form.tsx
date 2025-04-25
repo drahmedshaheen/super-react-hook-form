@@ -1,10 +1,10 @@
-import { useForm } from 'react-hook-form'
 import { signal } from '@preact/signals-react'
 import { Card, Button, Tabs, Form } from '@/components/ui'
 import { toast } from 'sonner'
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react'
 import type { UserFormValues } from '@/features/forms/user/schema'
 import { formControl } from '@/features/forms/user'
+import { formState$ } from '@/features/forms/user/subscribe'
 
 import PersonalInfoForm from '@/components/forms/personal-info-form'
 import ProfessionalInfoForm from '@/components/forms/professional-info-form'
@@ -57,10 +57,12 @@ const onSubmit = (data: UserFormValues) => {
 }
 
 export default function UserForm() {
-  useForm({ formControl })
-
   return (
-    <Form onSubmit={formControl.handleSubmit(onSubmit)}>
+    <Form
+      formControl={formControl}
+      formState$={formState$}
+      onSubmit={formControl.handleSubmit(onSubmit)}
+    >
       <Card className="mb-8">
         <Tabs
           value={activeTab.value}

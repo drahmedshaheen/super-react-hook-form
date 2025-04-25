@@ -6,7 +6,7 @@ import { calculateAge, calculateTax, getExperienceLevel } from './calculations'
 // Watch values for computed fields
 const firstName = signal('')
 const lastName = signal('')
-export const isFullName = computed(() => !!firstName.value && !!lastName.value)
+const isFullName = computed(() => !!firstName.value && !!lastName.value)
 export const fullName = computed(() => `${firstName} ${lastName}`)
 
 const dateOfBirth = signal<Date | null>(null)

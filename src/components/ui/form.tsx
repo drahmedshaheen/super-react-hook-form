@@ -10,8 +10,16 @@ import type { ControllerProps } from '@/features/forms/shared/controller'
 import type { ControllerFieldState } from '@/features/forms/shared/useController'
 import { FieldArray } from '@/features/forms/shared/field-array'
 import { useController } from '@/features/forms/shared/useController'
+import { useForm, type UseFormProps } from '@/features/forms/shared/useForm'
 
-const Form = (props: React.ComponentProps<'form'>) => <form {...props} />
+const Form = <TFieldValues extends FieldValues = FieldValues, TContext = any>({
+  formState$,
+  formControl,
+  ...props
+}: React.ComponentProps<'form'> & UseFormProps<TFieldValues, TContext>) => {
+  useForm({ formState$, formControl })
+  return <form {...props} />
+}
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
