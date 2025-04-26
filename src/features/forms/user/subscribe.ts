@@ -21,6 +21,7 @@ export const formState$ = new BehaviorSubject<FormState<UserFormInput>>({
   disabled: false,
   isTyping: false,
   typingFields: {},
+  isReady: false,
 })
 
 // Create an observable that emits distinct form state changes
