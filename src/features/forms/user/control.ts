@@ -1,11 +1,7 @@
 import { createFormControl } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import {
-  userFormSchema,
-  type UserFormInput,
-  type UserFormValues,
-} from './schema'
+import { userFormSchema, type UserFormInput } from './schema'
 
 const defaultValues: UserFormInput = {
   firstName: '',
@@ -40,11 +36,7 @@ const defaultValues: UserFormInput = {
   languages: [{ language: '', proficiency: 'beginner' }],
 }
 
-export const { formControl, control, getValues } = createFormControl<
-  UserFormInput,
-  any,
-  UserFormValues
->({
+export const { formControl, control, getValues } = createFormControl({
   resolver: zodResolver(userFormSchema),
   defaultValues,
   mode: 'onChange',
